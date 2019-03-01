@@ -42,15 +42,15 @@ class App extends Component {
 //###################################################
 //componentDidMount fetches all users, notes, and classrooms
     componentDidMount() {
-      fetch(`${BASEURL}/users`)
+      fetch(`/users`)
       .then(r=>r.json())
       .then(users=>this.setState({users}))
 
-      fetch(`${BASEURL}/notes`)
+      fetch(`/notes`)
       .then(r=>r.json())
       .then(notes=>this.setState({notes}))
 
-      fetch(`${BASEURL}/classrooms`)
+      fetch(`/classrooms`)
       .then(r=>r.json())
       .then(classrooms=> this.setState({classrooms}))
     }
@@ -68,7 +68,7 @@ class App extends Component {
       noteEdit = (value) => {
           this.setState({ text: value },()=>{
             if (this.state.currentNote.id>0){
-              fetch(`${BASEURL}/notes/${this.state.currentNote.id}`, {
+              fetch(`/notes/${this.state.currentNote.id}`, {
               method: "PATCH",
               headers:
               {
@@ -216,7 +216,7 @@ class App extends Component {
 // handling saving functionality
 //new note
         if (e.target.id === 'save' && !this.state.currentNote) {
-        fetch(`${BASEURL}/notes`, {
+        fetch(`/notes`, {
         method: "POST",
         headers:
         {
@@ -236,7 +236,7 @@ class App extends Component {
       //   })
 //edit note
       } else if(e.target.id === 'save' && this.state.currentNote.id>0){
-        fetch(`${BASEURL}/notes/${this.state.currentNote.id}`, {
+        fetch(`/notes/${this.state.currentNote.id}`, {
         method: "PATCH",
         headers:
         {
@@ -258,7 +258,7 @@ class App extends Component {
 //##################################################################
 // handling delete functionality
     e.target.id === 'delete' && this.state.currentNote &&
-    fetch(`${BASEURL}/notes/${this.state.currentNote.id}`, {
+    fetch(`/notes/${this.state.currentNote.id}`, {
       method: 'DELETE'
     })
     // .then(r=>r.json())
@@ -274,7 +274,7 @@ class App extends Component {
 
       handleSubmit = e => {
         if (this.state.activeMenuLogIn==='Sign In'){
-        fetch(`${BASEURL}/login`, {
+        fetch(`/login`, {
           method: 'POST',
           headers:
           {
@@ -289,7 +289,7 @@ class App extends Component {
         .then(r=>{
           r.success &&
           this.setState({authenticated: r.success, currentUser: r.user, userClassrooms: r.classrooms, userNotes: r.notes},()=>{
-          fetch(`${BASEURL}/listener/`, {
+          fetch(`/listener/`, {
             method: 'POST',
             headers:
             {
@@ -308,7 +308,7 @@ class App extends Component {
             })
           })
         } else if (this.state.activeMenuLogIn==='Register'){
-          fetch(`${BASEURL}/register`, {
+          fetch(`/register`, {
             method: 'POST',
             headers:
             {
@@ -323,7 +323,7 @@ class App extends Component {
           .then(r=>{
             r.success &&
             this.setState({authenticated: r.success, currentUser: r.user, userClassrooms: r.classrooms, userNotes: r.notes},()=>{
-            fetch(`${BASEURL}/listener/`, {
+            fetch(`/listener/`, {
               method: 'POST',
               headers:
               {
@@ -352,7 +352,7 @@ class App extends Component {
 // newClassRoomName
       handleNewClassRoom = e =>{
         e.preventDefault()
-        fetch(`${BASEURL}/classrooms`, {
+        fetch(`/classrooms`, {
           method: "POST",
           headers:
           {
