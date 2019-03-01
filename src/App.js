@@ -8,7 +8,7 @@ import Header from './Components/Header'
 import Login from './Components/Login'
 import { ActionCableConsumer } from 'react-actioncable-provider'
 import { Segment } from 'semantic-ui-react'
-const BASEURL = 'http://localhost:9000/'
+const BASEURL = 'http://localhost:9000/api/v1'
 
 class App extends Component {
     state = {
