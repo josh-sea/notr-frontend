@@ -57,12 +57,12 @@ class App extends Component {
 
 //###################################################
 //handles draging text from modal to simulate close click
-      handleDragLeave = (e) => {
-        e.target.parentNode.parentNode.querySelector('.btn.waves-effect.waves-light.btn-flat.modal-action.modal-close').click()
-      }
-      handleWikiLeave = (e) => {
-        document.querySelector('#note-header').click()
-      }
+      // handleDragLeave = (e) => {
+      //   e.target.parentNode.parentNode.querySelector('.btn.waves-effect.waves-light.btn-flat.modal-action.modal-close').click()
+      // }
+      // handleWikiLeave = (e) => {
+      //   document.querySelector('#note-header').click()
+      // }
 //###################################################
 //controlling input to text editor
       noteEdit = (value) => {
