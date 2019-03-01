@@ -8,7 +8,7 @@ import Header from './Components/Header'
 import Login from './Components/Login'
 import { ActionCableConsumer } from 'react-actioncable-provider'
 import { Segment } from 'semantic-ui-react'
-
+const BASEURL = 'https://notr-backend.herokuapp.com'
 class App extends Component {
     state = {
       notes: [],
@@ -42,15 +42,15 @@ class App extends Component {
 //###################################################
 //componentDidMount fetches all users, notes, and classrooms
     componentDidMount() {
-      fetch('http://localhost:9000/api/v1/users')
+      fetch(`${BASEURL}/users`)
       .then(r=>r.json())
       .then(users=>this.setState({users}))
 
-      fetch('http://localhost:9000/api/v1/notes')
+      fetch(`${BASEURL}/notes`)
       .then(r=>r.json())
       .then(notes=>this.setState({notes}))
 
-      fetch('http://localhost:9000/api/v1/classrooms')
+      fetch(`${BASEURL}/classrooms`)
       .then(r=>r.json())
       .then(classrooms=> this.setState({classrooms}))
     }
@@ -68,7 +68,7 @@ class App extends Component {
       noteEdit = (value) => {
           this.setState({ text: value },()=>{
             if (this.state.currentNote.id>0){
-              fetch(`http://localhost:9000/api/v1/notes/${this.state.currentNote.id}`, {
+              fetch(`${BASEURL}/notes/${this.state.currentNote.id}`, {
               method: "PATCH",
               headers:
               {
@@ -216,7 +216,7 @@ class App extends Component {
 // handling saving functionality
 //new note
         if (e.target.id === 'save' && !this.state.currentNote) {
-        fetch('http://localhost:9000/api/v1/notes', {
+        fetch(`${BASEURL}/notes`, {
         method: "POST",
         headers:
         {
@@ -236,7 +236,7 @@ class App extends Component {
       //   })
 //edit note
       } else if(e.target.id === 'save' && this.state.currentNote.id>0){
-        fetch(`http://localhost:9000/api/v1/notes/${this.state.currentNote.id}`, {
+        fetch(`${BASEURL}/notes/${this.state.currentNote.id}`, {
         method: "PATCH",
         headers:
         {
@@ -258,7 +258,7 @@ class App extends Component {
 //##################################################################
 // handling delete functionality
     e.target.id === 'delete' && this.state.currentNote &&
-    fetch(`http://localhost:9000/api/v1/notes/${this.state.currentNote.id}`, {
+    fetch(`${BASEURL}/notes/${this.state.currentNote.id}`, {
       method: 'DELETE'
     })
     // .then(r=>r.json())
@@ -274,7 +274,7 @@ class App extends Component {
 
       handleSubmit = e => {
         if (this.state.activeMenuLogIn==='Sign In'){
-        fetch("http://localhost:9000/api/v1/login", {
+        fetch(`${BASEURL}/login`, {
           method: 'POST',
           headers:
           {
@@ -289,7 +289,7 @@ class App extends Component {
         .then(r=>{
           r.success &&
           this.setState({authenticated: r.success, currentUser: r.user, userClassrooms: r.classrooms, userNotes: r.notes},()=>{
-          fetch(`http://localhost:9000/api/v1/listener/`, {
+          fetch(`${BASEURL}/listener/`, {
             method: 'POST',
             headers:
             {
@@ -308,7 +308,7 @@ class App extends Component {
             })
           })
         } else if (this.state.activeMenuLogIn==='Register'){
-          fetch("http://localhost:9000/api/v1/register", {
+          fetch(`${BASEURL}/register`, {
             method: 'POST',
             headers:
             {
@@ -323,7 +323,7 @@ class App extends Component {
           .then(r=>{
             r.success &&
             this.setState({authenticated: r.success, currentUser: r.user, userClassrooms: r.classrooms, userNotes: r.notes},()=>{
-            fetch(`http://localhost:9000/api/v1/listener/`, {
+            fetch(`${BASEURL}/listener/`, {
               method: 'POST',
               headers:
               {
@@ -352,7 +352,7 @@ class App extends Component {
 // newClassRoomName
       handleNewClassRoom = e =>{
         e.preventDefault()
-        fetch('http://localhost:9000/api/v1/classrooms', {
+        fetch(`${BASEURL}/classrooms`, {
           method: "POST",
           headers:
           {
