@@ -7,7 +7,7 @@ import { ActionCableProvider } from 'react-actioncable-provider';
 
 
 ReactDOM.render(
-  <ActionCableProvider url={'ws://localhost:9000/cable'}>
+  <ActionCableProvider url={'ws://notr-backend.herokuapp.com//cable'}>
     <App />
   </ActionCableProvider>,
 document.getElementById('root'));
