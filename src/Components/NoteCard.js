@@ -7,7 +7,7 @@ const NoteCard = ({ handleDragLeave, currentClassroom, note, users, handleSeeLiv
   const foundUser = users.find(user=>{
     return user.id === note.user_id
   })
-  
+
   return (
     <Card>
        <Card.Content>
@@ -15,7 +15,7 @@ const NoteCard = ({ handleDragLeave, currentClassroom, note, users, handleSeeLiv
          <Card.Meta>{foundUser.username}</Card.Meta>
        </Card.Content>
        <Card.Content extra style={{display: 'flex', justifyContent: 'center'}}>
-       <Button id={note.id} onClick={handleSeeLiveNote}>Toggle View</Button>
+       <Button id={note.id} onClick={handleSeeLiveNote}>Live View</Button>
        </Card.Content>
      </Card>
      );
