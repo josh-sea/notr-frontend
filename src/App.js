@@ -9,8 +9,8 @@ import Login from './Components/Login'
 import { ActionCableConsumer } from 'react-actioncable-provider'
 import { Segment } from 'semantic-ui-react'
 // const BASEURL = 'http://localhost:3000/api/v1'
-const BASEURL = `https://notr-backend.herokuapp.com/api/v1`
-// const BASEURL = `http://${window.location.hostname}:3000/api/v1`
+// const BASEURL = `https://notr-backend.herokuapp.com/api/v1`
+const BASEURL = `http://${window.location.hostname}:3000/api/v1`
 
 class App extends Component {
     state = {
@@ -42,23 +42,26 @@ class App extends Component {
       selectedClassNote: {},
       password: '',
       passwordConfirm: '',
+      welcomeRender: false,
     }
 
 //###################################################
 //componentDidMount fetches all users, notes, and classrooms
     componentDidMount() {
+      // fetch(`${BASEURL}/users`)
+      // .then(r=>r.json())
+      // .then(users=>{
+      //   this.setState({users})
+      // })
+      // fetch(`${BASEURL}/notes`)
+      // .then(r=>r.json())
+      // .then(notes=>{
+      //   this.setState({users})
+      // })
+      // fetch(`${BASEURL}/classrooms`)
+      // .then(r=>r.json())
+      // .then(classrooms=> this.setState({classrooms}))
       let token = localStorage.getItem('token')
-      fetch(`${BASEURL}/users`)
-      .then(r=>r.json())
-      .then(users=>this.setState({users}))
-
-      fetch(`${BASEURL}/notes`)
-      .then(r=>r.json())
-      .then(notes=>this.setState({notes}))
-
-      fetch(`${BASEURL}/classrooms`)
-      .then(r=>r.json())
-      .then(classrooms=> this.setState({classrooms}))
       if (token){
         fetch(`${BASEURL}/curr_user`, {
           headers:
@@ -68,7 +71,18 @@ class App extends Component {
         })
         .then(r=>r.json())
         .then(r=>{
-            this.setState({authenticated: r.success, currentUser: r.user, userClassrooms: r.classrooms, userNotes: r.notes, password: '', username: ''},()=>{
+            this.setState({
+              authenticated: r.success,
+              currentUser: r.user,
+              userClassrooms: r.classrooms,
+              userNotes: r.notes,
+              password: '',
+              username: '',
+              notes: r.user.notes,
+              users: r.users,
+              classrooms: r.user.classrooms,
+              welcomeRender: true,
+            },()=>{
               const classroomNames = this.state.userClassrooms.map(classroom=>{
                 return { key: classroom.id, value: classroom.id, text: classroom.name }
               })
@@ -91,7 +105,7 @@ class App extends Component {
 //controlling input to text editor
       noteEdit = (value) => {
           this.setState({ text: value },()=>{
-            if (this.state.currentNote.id>0){
+            if (this.state.currentNote.id>0 && this.state.selectedClassNote.id > 1){
               fetch(`${BASEURL}/notes/${this.state.currentNote.id}`, {
               method: "PATCH",
               headers:
@@ -135,7 +149,7 @@ class App extends Component {
     })
     foundNewNote ||
     this.setState(prevState=>{
-      return { notes: [...prevState.notes, note], userNotes: [...prevState.userNotes, note],text: '', title: '', selectedClassroom: {id: ''}}
+      return { notes: [...prevState.notes, note], userNotes: [...prevState.userNotes, note], text: '', title: '', selectedClassroom: {id: ''}}
     })
   }
 //edit functionality
@@ -320,7 +334,18 @@ class App extends Component {
         .then(r=>{
           !r.success ?
           alert('Username/Password did not match, please try again') :
-          this.setState({authenticated: r.success, currentUser: r.user, userClassrooms: r.classrooms, userNotes: r.notes, password: '', username: ''},()=>{
+          this.setState({
+            authenticated: r.success,
+            currentUser: r.user,
+            userClassrooms: r.classrooms,
+            userNotes: r.notes,
+            password: '',
+            username: '',
+            notes: r.user.notes,
+            users: r.users,
+            classrooms: r.user.classrooms,
+            welcomeRender: true,
+          },()=>{
             const classroomNames = this.state.userClassrooms.map(classroom=>{
               return { key: classroom.id, value: classroom.id, text: classroom.name }
             })
@@ -345,7 +370,18 @@ class App extends Component {
           .then(r=>{
             !r.success ?
             alert(r.errors) :
-            this.setState({authenticated: r.success, currentUser: r.user, userClassrooms: r.classrooms, userNotes: r.notes, password: '', username: ''},()=>{
+            this.setState({
+              authenticated: r.success,
+              currentUser: r.user,
+              userClassrooms: r.classrooms,
+              userNotes: r.notes,
+              password: '',
+              username: '',
+              notes: r.user.notes,
+              users: r.users,
+              classrooms: r.user.classrooms,
+              welcomeRender: true,
+            },()=>{
               const classroomNames = this.state.userClassrooms.map(classroom=>{
                 return { key: classroom.id, value: classroom.id, text: classroom.name }
               })
@@ -463,6 +499,9 @@ handleSeeLiveNote = e => {
   const selectedClassNote = this.state.notes.find(note=>{
     return note.id === parseInt(e.target.id)
   })
+  const autSaveTimer = () =>{
+
+  }
   this.setState(prevState=>{
     return {bottomQuill: !prevState.bottomQuill}},()=>{
       this.state.bottomQuill ? this.setState({mainQuillHeight: 30, textBottomQuill: selectedClassNote.content, selectedClassNote}) : this.setState({mainQuillHeight: 80, textBottomQuill: '', selectedClassNote: {}})
@@ -480,7 +519,7 @@ handleSeeLiveNote = e => {
   handleReceive = (res) => {
     if (res.request === 'new'){
       return this.newNote(res.note)
-    } else if (res.request === 'edit' && this.state.selectedClassNote.id === res.note.id) {
+    } else if (res.request === 'edit') {
       return this.editNote(res.note)
     }else if (res.request === 'delete') {
       return this.deleteNote(res.note)
@@ -562,6 +601,7 @@ handleSeeLiveNote = e => {
                 handleTitleChange={this.handleTitleChange}
                 classroomNames={this.state.classroomNames}
                 handleClassSelect={this.handleClassSelect}
+                welcomeRender={this.state.welcomeRender}
                 />
               </Col>
               {this.state.editView && this.state.noteStatus &&
