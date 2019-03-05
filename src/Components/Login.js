@@ -2,7 +2,7 @@ import React from 'react';
 import { Form, Container, Header, Menu, Segment } from 'semantic-ui-react'
 import {Animated} from "react-animated-css";
 
-const Login = ({name, handleLoginType, handleSubmit, activeMenuLogIn, handleSignInMenuTab}) => (
+const Login = ({name, handleLoginType, handleSubmit, activeMenuLogIn, handleSignInMenuTab, handleLoginPass, password, passwordConfirm, handleLoginPassConfirm}) => (
 
 
 <div style={{height: '100%', width: '100%'}}>
@@ -22,8 +22,10 @@ const Login = ({name, handleLoginType, handleSubmit, activeMenuLogIn, handleSign
     <Header as='h2'>Welcome!</Header>
     <Animated animanimationIn="bounceInLeft" animationOut="fadeOut" isVisible={true}>
       <Form onSubmit={handleSubmit}>
-          <Form.Input placeholder='Name' name='name' value={name} onChange={handleLoginType} /><br/>
-            <Form.Button content={activeMenuLogIn} />
+          <Form.Input type='text' placeholder='Name' name='name' value={name} onChange={handleLoginType} /><br/>
+          <Form.Input type='password' placeholder='Password' name='password' value={password} onChange={handleLoginPass} /><br/>
+          {activeMenuLogIn==='Register' &&<Form.Input type='password' placeholder='Confirm Password' name='passwordConfirm' value={passwordConfirm} onChange={handleLoginPassConfirm} />}
+          <Form.Button content={activeMenuLogIn} />
       </Form>
       </Animated>
       </Segment>

@@ -2,7 +2,7 @@ import React from 'react';
 import {  Card, Button } from 'semantic-ui-react'
 // import ModalGen from './ModalGen'
 
-const NoteCard = ({ handleDragLeave, currentClassroom, note, users, handleSeeLiveNote, textBottomQuill, bottomQuill }) => {
+const NoteCard = ({ handleDragLeave, currentUser, currentClassroom, note, users, handleSeeLiveNote, textBottomQuill, bottomQuill }) => {
 
   const foundUser = users.find(user=>{
     return user.id === note.user_id
@@ -12,7 +12,7 @@ const NoteCard = ({ handleDragLeave, currentClassroom, note, users, handleSeeLiv
     <Card>
        <Card.Content>
          <Card.Header>{note.title}</Card.Header>
-         <Card.Meta>{foundUser.username}</Card.Meta>
+         <Card.Meta>{foundUser ? foundUser.username : currentUser.username}</Card.Meta>
        </Card.Content>
        <Card.Content extra style={{display: 'flex', justifyContent: 'center'}}>
        <Button id={note.id} onClick={handleSeeLiveNote}>Live View</Button>
@@ -23,10 +23,3 @@ const NoteCard = ({ handleDragLeave, currentClassroom, note, users, handleSeeLiv
 
 
 export default NoteCard;
-
-// <Modal
-// header={note.title}
-// fixedFooter
-// trigger={<Button className='green'>View Note</Button>}>
-// <p onDragLeave={handleDragLeave} >{handleTags()}</p>
-// </Modal>
