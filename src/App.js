@@ -8,8 +8,9 @@ import Header from './Components/Header'
 import Login from './Components/Login'
 import { ActionCableConsumer } from 'react-actioncable-provider'
 import { Segment } from 'semantic-ui-react'
-const BASEURL = 'http://localhost:9000/api/v1'
-// const BASEURL = 'http://window.location.hostname:9000/api/v1'
+// const BASEURL = 'http://localhost:3000/api/v1'
+const BASEURL = `https://notr-backend.herokuapp.com/api/v1`
+// const BASEURL = `http://${window.location.hostname}:3000/api/v1`
 
 class App extends Component {
     state = {
@@ -67,7 +68,6 @@ class App extends Component {
         })
         .then(r=>r.json())
         .then(r=>{
-            console.log(r);
             this.setState({authenticated: r.success, currentUser: r.user, userClassrooms: r.classrooms, userNotes: r.notes, password: '', username: ''},()=>{
               const classroomNames = this.state.userClassrooms.map(classroom=>{
                 return { key: classroom.id, value: classroom.id, text: classroom.name }
@@ -232,26 +232,26 @@ class App extends Component {
       textBottomQuill: '',
       selectedClassNote: {}
     },()=>{
-      // localStorage.removeItem({});
+      localStorage.removeItem('token');
     })
 //##################################################################
 // handling saving functionality
 //new note
         if (e.target.id === 'save' && !this.state.currentNote) {
-        fetch(`${BASEURL}/notes`, {
-        method: "POST",
-        headers:
-        {
-          "Content-Type": 'application/json',
-          "Accept": 'application/json'
-        },
-        body: JSON.stringify({
-          title: this.state.title,
-          content: this.state.text,
-          user_id: this.state.currentUser.id,
-          classroom_id: this.state.selectedClassroom.id
+          fetch(`${BASEURL}/notes`, {
+          method: "POST",
+          headers:
+          {
+            "Content-Type": 'application/json',
+            "Accept": 'application/json'
+          },
+          body: JSON.stringify({
+            title: this.state.title,
+            content: this.state.text,
+            user_id: this.state.currentUser.id,
+            classroom_id: this.state.selectedClassroom.id
+          })
         })
-      })
       // .then(r=>r.json())
       // .then(r=>{
       //      return this.newNote(r)
@@ -476,15 +476,24 @@ handleSeeLiveNote = e => {
   }
 
 //#######################################################
+//handle
   handleReceive = (res) => {
     if (res.request === 'new'){
       return this.newNote(res.note)
-    } else if (res.request === 'edit') {
+    } else if (res.request === 'edit' && this.state.selectedClassNote.id === res.note.id) {
       return this.editNote(res.note)
     }else if (res.request === 'delete') {
       return this.deleteNote(res.note)
     }
   }
+//#######################################################
+  //  classNotes = () => {
+  //   return this.state.notes.filter(note=>{
+  //     return note.classroom_id === currentClassroom.id
+  //   })
+  // }
+
+
     render() {
       return (
         <div>
