@@ -8,7 +8,8 @@ import Header from './Components/Header'
 import Login from './Components/Login'
 import { ActionCableConsumer } from 'react-actioncable-provider'
 import { Segment } from 'semantic-ui-react'
-const BASEURL = 'https://notr-backend.herokuapp.com'
+const BASEURL = 'http://localhost:9000/api/v1'
+// const BASEURL = 'http://window.location.hostname:9000/api/v1'
 
 class App extends Component {
     state = {
@@ -37,12 +38,15 @@ class App extends Component {
       bottomQuill: false,
       mainQuillHeight: 80,
       textBottomQuill: '',
-      selectedClassNote: {}
+      selectedClassNote: {},
+      password: '',
+      passwordConfirm: '',
     }
 
 //###################################################
 //componentDidMount fetches all users, notes, and classrooms
     componentDidMount() {
+      let token = localStorage.getItem('token')
       fetch(`${BASEURL}/users`)
       .then(r=>r.json())
       .then(users=>this.setState({users}))
@@ -54,7 +58,26 @@ class App extends Component {
       fetch(`${BASEURL}/classrooms`)
       .then(r=>r.json())
       .then(classrooms=> this.setState({classrooms}))
-    }
+      if (token){
+        fetch(`${BASEURL}/curr_user`, {
+          headers:
+          {
+            'Authorization':token
+          }
+        })
+        .then(r=>r.json())
+        .then(r=>{
+            console.log(r);
+            this.setState({authenticated: r.success, currentUser: r.user, userClassrooms: r.classrooms, userNotes: r.notes, password: '', username: ''},()=>{
+              const classroomNames = this.state.userClassrooms.map(classroom=>{
+                return { key: classroom.id, value: classroom.id, text: classroom.name }
+              })
+              this.setState({classroomNames})
+              localStorage.setItem('token', r.token);
+              })
+            })
+        }
+    }//end if componentDidMount
 
 //###################################################
 //handles draging text from modal to simulate close click
@@ -94,6 +117,7 @@ class App extends Component {
         const currentNote = this.state.notes.find(note=>{
           return note.id === parseInt(e.target.dataset.id)
         })
+        currentNote &&
         this.setState({currentNote},()=>{
           const currentClassroom = this.state.classrooms.find(classroom=>{
             return classroom.id === this.state.currentNote.classroom_id
@@ -151,15 +175,12 @@ class App extends Component {
   }
 //delete function
     deleteNote = (r) => {
-      const allNoteIndex =  this.state.notes.indexOf(this.state.currentNote)
-      const foundUserNote = this.state.userNotes.find(usernote=>{
-        return usernote.id === r.id
+      const newAllN = this.state.notes.filter(note => {
+        return note.id !== r.id
       })
-      const userNoteIndex = this.state.userNotes.indexOf(foundUserNote)
-      const newAllN = [...this.state.notes]
-      newAllN.splice(allNoteIndex,1)
-      const newUserN = [...this.state.userNotes]
-      newUserN.splice(userNoteIndex,1)
+      const newUserN = this.state.userNotes.filter(note => {
+        return note.id !== r.id
+      })
       this.setState({
         notes: newAllN,
         userNotes: newUserN,
@@ -211,7 +232,7 @@ class App extends Component {
       textBottomQuill: '',
       selectedClassNote: {}
     },()=>{
-      localStorage.removeItem('currentUserID', this.state.currentUser.id);
+      // localStorage.removeItem({});
     })
 //##################################################################
 // handling saving functionality
@@ -273,8 +294,16 @@ class App extends Component {
         this.setState({username: e.target.value})
       }
 
+      handleLoginPass = e =>{
+        this.setState({password: e.target.value})
+      }
+
+      handleLoginPassConfirm = e =>{
+        this.setState({passwordConfirm: e.target.value})
+      }
+
       handleSubmit = e => {
-        if (this.state.activeMenuLogIn==='Sign In'){
+        if (this.state.activeMenuLogIn === 'Sign In'){
         fetch(`${BASEURL}/login`, {
           method: 'POST',
           headers:
@@ -283,32 +312,23 @@ class App extends Component {
             "Accept": 'application/json'
           },
           body: JSON.stringify({
-            username: this.state.username
+            username: this.state.username,
+            password: this.state.password
         })
       })
         .then(r=>r.json())
         .then(r=>{
-          r.success &&
-          this.setState({authenticated: r.success, currentUser: r.user, userClassrooms: r.classrooms, userNotes: r.notes},()=>{
-          fetch(`${BASEURL}/listener/`, {
-            method: 'POST',
-            headers:
-            {
-              "Content-Type": 'application/json',
-              "Accept": 'application/json'
-            },
-            body: JSON.stringify({
-              user_id: this.state.currentUser.id
-            })
-          })
+          !r.success ?
+          alert('Username/Password did not match, please try again') :
+          this.setState({authenticated: r.success, currentUser: r.user, userClassrooms: r.classrooms, userNotes: r.notes, password: '', username: ''},()=>{
             const classroomNames = this.state.userClassrooms.map(classroom=>{
               return { key: classroom.id, value: classroom.id, text: classroom.name }
             })
             this.setState({classroomNames})
-            localStorage.setItem('currentUserID', this.state.currentUser.id);
+            localStorage.setItem('token', r.token);
             })
           })
-        } else if (this.state.activeMenuLogIn==='Register'){
+        } else if (this.state.activeMenuLogIn==='Register' && this.state.password === this.state.passwordConfirm){
           fetch(`${BASEURL}/register`, {
             method: 'POST',
             headers:
@@ -317,34 +337,24 @@ class App extends Component {
               "Accept": 'application/json'
             },
             body: JSON.stringify({
-              username: this.state.username
+              username: this.state.username,
+              password: this.state.password
             })
           })
           .then(r=>r.json())
           .then(r=>{
-            r.success &&
-            this.setState({authenticated: r.success, currentUser: r.user, userClassrooms: r.classrooms, userNotes: r.notes},()=>{
-            fetch(`${BASEURL}/listener/`, {
-              method: 'POST',
-              headers:
-              {
-                "Content-Type": 'application/json',
-                "Accept": 'application/json'
-              },
-              body: JSON.stringify({
-                user_id: this.state.currentUser.id
-              })
-            })
+            !r.success ?
+            alert(r.errors) :
+            this.setState({authenticated: r.success, currentUser: r.user, userClassrooms: r.classrooms, userNotes: r.notes, password: '', username: ''},()=>{
               const classroomNames = this.state.userClassrooms.map(classroom=>{
                 return { key: classroom.id, value: classroom.id, text: classroom.name }
               })
               this.setState({classroomNames})
-              localStorage.setItem('currentUserID', this.state.currentUser.id);
-              })
-            })
-          alert('Registered');
+              localStorage.setItem('token', r.token);
+            },()=>{alert('Registered')})
+          })
         }
-      }
+      }//end of login/register handlesubmit
       //####################################################
 // new classroom form
       newClassroomType = (e, {data}) =>{
@@ -377,7 +387,6 @@ class App extends Component {
           })
 //classroom does not exist for anyone
           if (!foundClass){
-            console.log('in new class');
           this.setState(prevState=>{
             return {
               classrooms: [...prevState.classrooms, classroom],
@@ -490,7 +499,17 @@ handleSeeLiveNote = e => {
           !this.state.authenticated &&
             <Row>
               <Col s={12}>
-                <Login name={this.state.username} handleSignInMenuTab={this.handleSignInMenuTab} activeMenuLogIn={this.state.activeMenuLogIn} handleLoginType={this.handleLoginType} handleSubmit={this.handleSubmit} />
+                <Login
+                name={this.state.username}
+                handleLoginPass={this.handleLoginPass}
+                password={this.state.password}
+                handleLoginPassConfirm={this.handleLoginPassConfirm}
+                passwordConfirm={this.state.passwordConfirm}
+                handleSignInMenuTab={this.handleSignInMenuTab}
+                activeMenuLogIn={this.state.activeMenuLogIn}
+                handleLoginType={this.handleLoginType}
+                handleSubmit={this.handleSubmit}
+                />
               </Col>
             </Row>
           }
@@ -503,7 +522,8 @@ handleSeeLiveNote = e => {
               handleSearchType={this.handleSearchType}
               searchType={this.state.searchType}
               currentUserID={this.state.currentUserID}
-              handleMenuClick={this.handleMenuClick} />
+              handleMenuClick={this.handleMenuClick}
+              />
             </Row>
             <Row>
               <Col s={3} >
@@ -546,6 +566,7 @@ handleSeeLiveNote = e => {
                 currentClassroom={this.state.currentClassroom}
                 users={this.state.users}
                 notes={this.state.notes}
+                currentUser={this.state.currentUser}
                 handleDragLeave={this.handleDragLeave}
                 />
               </Col>

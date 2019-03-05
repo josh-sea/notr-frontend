@@ -4,13 +4,14 @@ import { Card } from 'semantic-ui-react'
 import { Animated } from 'react-animated-css'
 const uuidv4 = require('uuid/v4')
 
-const LiveNotes = ({users, notes, currentClassroom, handleDragLeave, handleSeeLiveNote, checkNotes, textBottomQuill, bottomQuill}) => {
+const LiveNotes = ({users, notes, currentClassroom, handleDragLeave, handleSeeLiveNote, checkNotes, textBottomQuill, bottomQuill, currentUser}) => {
 
 const classNotes = notes.filter(note=>{
   return note.classroom_id === currentClassroom.id
 })
+
 const renderNotes = classNotes.map(note=>{
-  return   <NoteCard key={uuidv4()} users={users} note={note} currentClassroom={currentClassroom} handleDragLeave={handleDragLeave} handleSeeLiveNote={handleSeeLiveNote} textBottomQuill={textBottomQuill} bottomQuill={bottomQuill} />
+  return   <NoteCard key={uuidv4()} users={users} note={note} currentUser={currentUser} currentClassroom={currentClassroom} handleDragLeave={handleDragLeave} handleSeeLiveNote={handleSeeLiveNote} textBottomQuill={textBottomQuill} bottomQuill={bottomQuill} />
 })//end of note map
 
   return (
