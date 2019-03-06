@@ -7,7 +7,8 @@ import LiveNotes from './Containers/LiveNotes';
 import Header from './Components/Header'
 import Login from './Components/Login'
 import { ActionCableConsumer } from 'react-actioncable-provider'
-import { Segment } from 'semantic-ui-react'
+import { Segment, Dimmer } from 'semantic-ui-react'
+import Welcome from './Components/Welcome'
 // const BASEURL = 'http://localhost:3000/api/v1'
 // const BASEURL = `https://notr-backend.herokuapp.com/api/v1`
 const BASEURL = `http://${window.location.hostname}:3000/api/v1`
@@ -43,6 +44,7 @@ class App extends Component {
       password: '',
       passwordConfirm: '',
       welcomeRender: false,
+      active: false,
     }
 
 //###################################################
@@ -82,6 +84,7 @@ class App extends Component {
               users: r.users,
               classrooms: r.user.classrooms,
               welcomeRender: true,
+              active: true
             },()=>{
               const classroomNames = this.state.userClassrooms.map(classroom=>{
                 return { key: classroom.id, value: classroom.id, text: classroom.name }
@@ -336,6 +339,7 @@ class App extends Component {
           !r.success ?
           alert('Username/Password did not match, please try again') :
           this.setState({
+            active: true,
             authenticated: r.success,
             currentUser: r.user,
             userClassrooms: r.classrooms,
@@ -372,6 +376,7 @@ class App extends Component {
             !r.success ?
             alert(r.errors) :
             this.setState({
+              active: true,
               authenticated: r.success,
               currentUser: r.user,
               userClassrooms: r.classrooms,
@@ -535,6 +540,12 @@ handleSeeLiveNote = e => {
 //######################################################
 //popuptour
 
+  handleMenuClickSim = e =>{
+    this.setState({active:false},()=>{
+      document.getElementById('menu-dropdown').click()
+    })
+  }
+
     render() {
       return (
         <div>
@@ -565,75 +576,82 @@ handleSeeLiveNote = e => {
           }
         {
           this.state.authenticated &&
-          <Row style={{paddingLeft: '3%', paddingRight: '3%'}}>
-            <Row>
-              <Header
-              handleWikiLeave={this.handleWikiLeave}
-              handleSearchType={this.handleSearchType}
-              searchType={this.state.searchType}
-              currentUserID={this.state.currentUserID}
-              handleMenuClick={this.handleMenuClick}
-              />
+          <Dimmer.Dimmable as={Segment} dimmed={this.state.active}>
+            <Row style={{paddingLeft: '3%', paddingRight: '3%'}}>
+              <Row>
+                <Header
+                handleWikiLeave={this.handleWikiLeave}
+                handleSearchType={this.handleSearchType}
+                searchType={this.state.searchType}
+                currentUserID={this.state.currentUserID}
+                handleMenuClick={this.handleMenuClick}
+                />
+              </Row>
+              <Row>
+                <Col s={3} >
+                  <Classrooms
+                  click={this.handleClick}
+                  classrooms={this.state.userClassrooms}
+                  notes={this.state.userNotes}
+                  />
+                </Col>
+                <Col s={this.state.noteSize} >
+                  <NoteContainer
+                  noteEditBottomQuill={this.noteEditBottomQuill}
+                  textBottomQuill={this.state.textBottomQuill}
+                  bottomQuill={this.state.bottomQuill}
+                  mainQuillHeight={this.state.mainQuillHeight}
+                  selectedClassroom={this.state.selectedClassroom}
+                  editView={this.state.editView}
+                  newClassroomFormBool={this.state.newClassroomFormBool}
+                  newClassroomType={this.newClassroomType}
+                  newClassRoomName={this.state.newClassRoomName}
+                  handleNewClassRoom={this.handleNewClassRoom}
+                  activeItem={this.state.activeItem}
+                  noteEdit={this.noteEdit}
+                  text={this.state.text}
+                  title={this.state.title}
+                  handleTitleChange={this.handleTitleChange}
+                  classroomNames={this.state.classroomNames}
+                  handleClassSelect={this.handleClassSelect}
+                  welcomeRender={this.state.welcomeRender}
+                  handleMenuClickSim={this.handleMenuClickSim}
+                  />
+                </Col>
+                {this.state.editView && this.state.noteStatus &&
+                <h4 align='center'>Classroom: {this.state.currentClassroom.name}</h4>}
+                {this.state.editView && this.state.noteStatus &&
+                <Col s={3} >
+                  <LiveNotes
+                  bottomQuill={this.state.bottomQuill}
+                  textBottomQuill={this.state.textBottomQuill}
+                  handleSeeLiveNote={this.handleSeeLiveNote}
+                  currentClassroom={this.state.currentClassroom}
+                  users={this.state.users}
+                  notes={this.state.notes}
+                  currentUser={this.state.currentUser}
+                  handleDragLeave={this.handleDragLeave}
+                  />
+                </Col>
+              }
             </Row>
-            <Row>
-              <Col s={3} >
-
-                <Classrooms
-                click={this.handleClick}
-                classrooms={this.state.userClassrooms}
-                notes={this.state.userNotes}
-                />
-              </Col>
-              <Col s={this.state.noteSize} >
-                <NoteContainer
-                noteEditBottomQuill={this.noteEditBottomQuill}
-                textBottomQuill={this.state.textBottomQuill}
-                bottomQuill={this.state.bottomQuill}
-                mainQuillHeight={this.state.mainQuillHeight}
-                selectedClassroom={this.state.selectedClassroom}
-                editView={this.state.editView}
-                newClassroomFormBool={this.state.newClassroomFormBool}
-                newClassroomType={this.newClassroomType}
-                newClassRoomName={this.state.newClassRoomName}
-                handleNewClassRoom={this.handleNewClassRoom}
-                activeItem={this.state.activeItem}
-                noteEdit={this.noteEdit}
-                text={this.state.text}
-                title={this.state.title}
-                handleTitleChange={this.handleTitleChange}
-                classroomNames={this.state.classroomNames}
-                handleClassSelect={this.handleClassSelect}
-                welcomeRender={this.state.welcomeRender}
-                />
-              </Col>
-              {this.state.editView && this.state.noteStatus &&
-              <h4 align='center'>Classroom: {this.state.currentClassroom.name}</h4>}
-              {this.state.editView && this.state.noteStatus &&
-              <Col s={3} >
-                <LiveNotes
-                bottomQuill={this.state.bottomQuill}
-                textBottomQuill={this.state.textBottomQuill}
-                handleSeeLiveNote={this.handleSeeLiveNote}
-                currentClassroom={this.state.currentClassroom}
-                users={this.state.users}
-                notes={this.state.notes}
-                currentUser={this.state.currentUser}
-                handleDragLeave={this.handleDragLeave}
-                />
-              </Col>
-            }
           </Row>
-        </Row>}
-        {
-        this.state.authenticated &&
-        <Row>
-          <Col s={12}>
-            <Segment>
-              <h6>by: JoshSea 2019</h6>
-              <a href='https://www.github.com/josh-sea' target='_blank' rel="noopener noreferrer">GitHub</a>
-            </Segment>
-          </Col>
-        </Row>}
+          <Dimmer active={this.state.active}>
+          <Welcome handleMenuClickSim={this.handleMenuClickSim}/>
+          </Dimmer>
+          </Dimmer.Dimmable>
+
+        }
+          {
+          this.state.authenticated &&
+          <Row>
+            <Col s={12}>
+              <Segment>
+                <h6>by: JoshSea 2019</h6>
+                <a href='https://www.github.com/josh-sea' target='_blank' rel="noopener noreferrer">GitHub</a>
+              </Segment>
+            </Col>
+          </Row>}
       </div>
     );
   }

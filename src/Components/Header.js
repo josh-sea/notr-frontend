@@ -8,9 +8,8 @@ const Header = ({handleMenuClick, handleSearchType, handleWikiLeave, searchType}
 
 
   <div style={{background: '#333'}}>
-  <Menu attached='top' inverted >
-
-    <Dropdown item icon='setting' simple>
+  <Menu attached='top' inverted>
+    <Dropdown id='menu-dropdown' item icon='setting' simple>
       <Dropdown.Menu>
         <Dropdown.Item>
           <Icon name='dropdown' />

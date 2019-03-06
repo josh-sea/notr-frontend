@@ -6,16 +6,11 @@ const align =  {
   justifyContent: 'center',
   display: 'flex'
 }
-const handleMenuClickSim = e =>{
-  document.getElementById('menu-dropdown').click()
-}
 
-const Welcome = ({welcomeRender, handleMenuClick}) => (
+
+const Welcome = ({handleMenuClickSim}) => (
 
   <Container>
-
-
-
     <Segment>
       <Header as='h4'>
         Welcome to Notr! The note app focused on helping you create and share notes with your classmates...
