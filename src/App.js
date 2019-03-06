@@ -108,7 +108,7 @@ class App extends Component {
 //controlling input to text editor
       noteEdit = (value) => {
           this.setState({ text: value },()=>{
-            if (this.state.currentNote.id>0 && this.state.selectedClassNote.id > 1){
+            if (this.state.currentNote.id>0){
               fetch(`${BASEURL}/notes/${this.state.currentNote.id}`, {
               method: "PATCH",
               headers:
@@ -157,7 +157,13 @@ class App extends Component {
   }
 //edit functionality
   editNote = (r) => {
-    if (this.state.currentNote.id>0){
+    const classNotes = this.state.notes.filter(note=>{
+      return note.classroom_id === this.state.currentClassroom.id
+    })
+    const noteToChange = classNotes.find(note=>{
+      return note.id === r.id
+    })
+    if (noteToChange){
     if (this.state.currentUser.id === r.user_id){
         const newUserN = this.state.userNotes.map(userNote=>{
           if (userNote.id === r.id){
