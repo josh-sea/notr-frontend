@@ -120,8 +120,8 @@ class App extends Component {
                 classroom_id: this.state.currentNote.classroom_id
               })
             })
-            // .then(r=>r.json())
-            // .then(r=>this.editNote(r))
+            .then(r=>r.json())
+            .then(r=>this.editNote(r))
           }
         })
         }
@@ -137,7 +137,7 @@ class App extends Component {
             return classroom.id === this.state.currentNote.classroom_id
           })
           this.setState({currentClassroom},()=>{
-            this.setState({welcomeRender: false, text: this.state.currentNote.content, noteSize: 6, noteStatus: true, editView: true, newClassroomFormBool: false, title: this.state.currentNote.title, selectedClassroom: this.state.currentClassroom})
+            this.setState({text: this.state.currentNote.content, noteSize: 6, noteStatus: true, editView: true, newClassroomFormBool: false, title: this.state.currentNote.title, selectedClassroom: this.state.currentClassroom})
           })
         })
       }
@@ -213,7 +213,6 @@ class App extends Component {
 //###################################################
 //handles clicks on the main menu
     handleMenuClick = (e, data) =>{
-      this.setState({welcomeRender: false})
 //##################################################################
 //handling new note selection
     e.target.id === 'new-note' && this.setState({newClassroomFormBool: false, title: '', editView: true, noteStatus: false, text: '', currentNote: false, currentClassroom: {}, noteSize: 9, selectedClassroom: {id: ''}})
@@ -223,6 +222,9 @@ class App extends Component {
 //##################################################################
 //handling logging out
     e.target.id === 'logout' && this.setState({
+      notes: [],
+      users: [],
+      classrooms: [],
       text: '',
       currentUser: {},
       currentNote: false,
@@ -245,7 +247,10 @@ class App extends Component {
       bottomQuill: false,
       mainQuillHeight: 80,
       textBottomQuill: '',
-      selectedClassNote: {}
+      selectedClassNote: {},
+      password: '',
+      passwordConfirm: '',
+      welcomeRender: false,
     },()=>{
       localStorage.removeItem('token');
     })
@@ -267,10 +272,10 @@ class App extends Component {
             classroom_id: this.state.selectedClassroom.id
           })
         })
-      // .then(r=>r.json())
-      // .then(r=>{
-      //      return this.newNote(r)
-      //   })
+      .then(r=>r.json())
+      .then(r=>{
+           return this.newNote(r)
+        })
 //edit note
       } else if(e.target.id === 'save' && this.state.currentNote.id>0){
         fetch(`${BASEURL}/notes/${this.state.currentNote.id}`, {
@@ -287,10 +292,10 @@ class App extends Component {
           classroom_id: this.state.selectedClassroom.id
         })
       })
-      // .then(r=>r.json())
-      // .then(r=>{
-      //     return this.editNote(r)
-      // })
+      .then(r=>r.json())
+      .then(r=>{
+          this.editNote(r)
+      })
       }
 //##################################################################
 // handling delete functionality
@@ -298,10 +303,10 @@ class App extends Component {
     fetch(`${BASEURL}/notes/${this.state.currentNote.id}`, {
       method: 'DELETE'
     })
-    // .then(r=>r.json())
-    // .then(r=>{
-    //     return this.deleteNote(r)
-    // })
+    .then(r=>r.json())
+    .then(r=>{
+        return this.deleteNote(r)
+    })
 }//end of dropdown menu on click
 //##################################################
 //log in control and page rendering
@@ -532,8 +537,7 @@ handleSeeLiveNote = e => {
   //     return note.classroom_id === currentClassroom.id
   //   })
   // }
-//######################################################
-//popuptour
+
 
     render() {
       return (
@@ -541,7 +545,7 @@ handleSeeLiveNote = e => {
         <ActionCableConsumer
           channel={{channel: 'NewNoteChannel'}}
           onReceived={(res)=>{
-            this.handleReceive(res)
+            // this.handleReceive(res)
           }}
         >
         </ActionCableConsumer>
