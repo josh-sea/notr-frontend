@@ -7,7 +7,8 @@ import LiveNotes from './Containers/LiveNotes';
 import Header from './Components/Header'
 import Login from './Components/Login'
 import { ActionCableConsumer } from 'react-actioncable-provider'
-import { Segment } from 'semantic-ui-react'
+import { Segment, Dimmer } from 'semantic-ui-react'
+import Welcome from './Components/Welcome'
 // const BASEURL = 'http://localhost:3000/api/v1'
 const BASEURL = `https://notr-backend.herokuapp.com/api/v1`
 // const BASEURL = `http://${window.location.hostname}:3000/api/v1`
@@ -253,6 +254,7 @@ class App extends Component {
       password: '',
       passwordConfirm: '',
       welcomeRender: false,
+      active: false,
     },()=>{
       localStorage.removeItem('token');
     })
@@ -641,7 +643,6 @@ handleSeeLiveNote = e => {
           <Welcome handleMenuClickSim={this.handleMenuClickSim}/>
           </Dimmer>
           </Dimmer.Dimmable>
-
         }
           {
           this.state.authenticated &&
