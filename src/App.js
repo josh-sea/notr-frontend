@@ -43,6 +43,7 @@ class App extends Component {
       password: '',
       passwordConfirm: '',
       welcomeRender: false,
+      active: false,
     }
 
 //###################################################
@@ -352,6 +353,7 @@ class App extends Component {
             users: r.users,
             classrooms: r.user.classrooms,
             welcomeRender: true,
+            active: true,
           },()=>{
             const classroomNames = this.state.userClassrooms.map(classroom=>{
               return { key: classroom.id, value: classroom.id, text: classroom.name }
@@ -388,6 +390,7 @@ class App extends Component {
               users: r.users,
               classrooms: r.user.classrooms,
               welcomeRender: true,
+              active: true,
             },()=>{
               const classroomNames = this.state.userClassrooms.map(classroom=>{
                 return { key: classroom.id, value: classroom.id, text: classroom.name }
@@ -538,7 +541,11 @@ handleSeeLiveNote = e => {
   //     return note.classroom_id === currentClassroom.id
   //   })
   // }
-
+   handleMenuClickSim = e =>{
+     this.setState({active: false},()=>{
+       document.getElementById('menu-dropdown').click()
+     })
+  }
 
     render() {
       return (

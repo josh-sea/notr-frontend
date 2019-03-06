@@ -4,9 +4,9 @@ import NewClassroomForm from '../Components/NewClassRoomForm'
 import Welcome from '../Components/Welcome'
 
 
-const NoteContainer = ({ welcomeRender, noteEdit, activeItem, text, newClassroomType, newClassRoomName, handleNewClassRoom, newClassroomFormBool, editView, title, handleTitleChange, classroomNames, handleClassSelect, selectedClassroom, bottomQuill, mainQuillHeight, noteEditBottomQuill, textBottomQuill }) => (
+const NoteContainer = ({ handleMenuClickSim, welcomeRender, noteEdit, activeItem, text, newClassroomType, newClassRoomName, handleNewClassRoom, newClassroomFormBool, editView, title, handleTitleChange, classroomNames, handleClassSelect, selectedClassroom, bottomQuill, mainQuillHeight, noteEditBottomQuill, textBottomQuill }) => (
     <div>
-      {welcomeRender && <Welcome />}
+      {welcomeRender && <Welcome handleMenuClickSim={handleMenuClickSim}/>}
       {!editView && newClassroomFormBool &&
       <NewClassroomForm
         newClassroomType={newClassroomType}

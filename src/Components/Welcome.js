@@ -6,11 +6,9 @@ const align =  {
   justifyContent: 'center',
   display: 'flex'
 }
-const handleMenuClickSim = e =>{
-  document.getElementById('menu-dropdown').click()
-}
 
-const Welcome = ({handleMenuClick}) => (
+
+const Welcome = ({handleMenuClickSim}) => (
 
   <Container>
     <Segment>
