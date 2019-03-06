@@ -559,7 +559,7 @@ handleSeeLiveNote = e => {
         <ActionCableConsumer
           channel={{channel: 'NewNoteChannel'}}
           onReceived={(res)=>{
-            // this.handleReceive(res)
+            this.handleReceive(res)
           }}
         >
         </ActionCableConsumer>
