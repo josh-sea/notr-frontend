@@ -9,9 +9,13 @@ const align =  {
 const handleMenuClickSim = e =>{
   document.getElementById('menu-dropdown').click()
 }
+
 const Welcome = ({welcomeRender, handleMenuClick}) => (
 
   <Container>
+
+
+
     <Segment>
       <Header as='h4'>
         Welcome to Notr! The note app focused on helping you create and share notes with your classmates...
@@ -32,7 +36,8 @@ const Welcome = ({welcomeRender, handleMenuClick}) => (
         <p>BONUS: You may find this note system to be live. If you view a fellowclassmates note who is currently editing, you will see the changes live.</p>
         <p>BONUS BONUS: A wikipedia search has been added to the top right, feel free to use wikipedia to add to your notes!</p>
       </Header>
-        <Button onClick={handleMenuClickSim}>Start</Button>
+        <div style={align}><Button onClick={handleMenuClickSim}>Start</Button></div>
+        <div id='editor'></div>
     </Segment>
   </Container>
 );
