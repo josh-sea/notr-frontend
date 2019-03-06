@@ -5,7 +5,7 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { ActionCableProvider } from 'react-actioncable-provider';
 // const CABLEURL = `ws://localhost:3000/api/v1/cable`
-const CABLEURL = `ws://${window.document.location.host}``/api/v1/cable`
+const CABLEURL = `ws://${window.document.location.host}/api/v1/cable`
 // const CABLEURL = `ws://${window.location.hostname}:3000/api/v1/cable`
 
 ReactDOM.render(
