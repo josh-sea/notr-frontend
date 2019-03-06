@@ -106,27 +106,30 @@ class App extends Component {
 //###################################################
 //controlling input to text editor
       noteEdit = (value) => {
-          this.setState({ text: value },()=>{
-            if (this.state.currentNote.id>0 && this.state.selectedClassNote.id > 1){
-              fetch(`${BASEURL}/notes/${this.state.currentNote.id}`, {
-              method: "PATCH",
-              headers:
-              {
-                "Content-Type": 'application/json',
-                "Accept": 'application/json'
-              },
-              body: JSON.stringify({
-                title: this.state.title,
-                content: this.state.text,
-                user_id: this.state.currentUser.id,
-                classroom_id: this.state.currentNote.classroom_id
-              })
-            })
-            .then(r=>r.json())
-            .then(r=>this.editNote(r))
-          }
-        })
-        }
+          this.setState({ text: value })
+      // ,()=>{
+      //       if (this.state.currentNote.id>0 && this.state.selectedClassNote.id > 1){
+      //         fetch(`${BASEURL}/notes/${this.state.currentNote.id}`, {
+      //         method: "PATCH",
+      //         headers:
+      //         {
+      //           "Content-Type": 'application/json',
+      //           "Accept": 'application/json'
+      //         },
+      //         body: JSON.stringify({
+      //           title: this.state.title,
+      //           content: this.state.text,
+      //           user_id: this.state.currentUser.id,
+      //           classroom_id: this.state.currentNote.classroom_id
+      //         })
+      //       })
+      //       .then(r=>r.json())
+      //       .then(r=>{
+      //         this.editNote(r)
+      //       })
+      //     }
+      //   })
+      }
 //###################################################
 //controlling click on an individual note button
       handleClick = e => {
@@ -172,7 +175,9 @@ class App extends Component {
               return anote
           }
         })
+        console.log(this.state.userNotes);
         this.setState({userNotes: newUserN, notes: newAllN},()=>{
+          console.log(this.state.userNotes);
           this.state.bottomQuill && this.state.selectedClassNote.id === r.id && this.setState({ textBottomQuill: r.content })
         })
       } else {
@@ -278,7 +283,7 @@ class App extends Component {
         })
       .then(r=>r.json())
       .then(r=>{
-           return this.newNote(r)
+          this.newNote(r)
         })
 //edit note
       } else if(e.target.id === 'save' && this.state.currentNote.id>0){
@@ -298,7 +303,7 @@ class App extends Component {
       })
       .then(r=>r.json())
       .then(r=>{
-          this.editNote(r)
+        this.editNote(r)
       })
       }
 //##################################################################
@@ -555,7 +560,7 @@ handleSeeLiveNote = e => {
         <ActionCableConsumer
           channel={{channel: 'NewNoteChannel'}}
           onReceived={(res)=>{
-            this.handleReceive(res)
+            // this.handleReceive(res)
           }}
         >
         </ActionCableConsumer>
