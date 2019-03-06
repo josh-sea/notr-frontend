@@ -1,6 +1,6 @@
 import React from 'react';
 // import Classroom from '../Components/Classroom'
-import { Accordion, Button, Segment } from 'semantic-ui-react'
+import { Accordion, Button, Segment, Header } from 'semantic-ui-react'
 
 
 const uuidv4 = require('uuid/v4')
@@ -35,6 +35,7 @@ const Classrooms = ({notes, classrooms, click}) => {
 
   return (
     <Segment style={{height: '85vh', overflow: 'scroll', padding: '3px',margin: '2px'}}>
+      <Header style={{alignItems: 'center', jsutifyContent: 'center', marginLeft: '25%'}}as='h2'> Your Classrooms:</Header>
       <Accordion panels={uniqRootPanel} styled />
     </Segment>
   )
