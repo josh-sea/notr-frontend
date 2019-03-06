@@ -137,7 +137,7 @@ class App extends Component {
             return classroom.id === this.state.currentNote.classroom_id
           })
           this.setState({currentClassroom},()=>{
-            this.setState({text: this.state.currentNote.content, noteSize: 6, noteStatus: true, editView: true, newClassroomFormBool: false, title: this.state.currentNote.title, selectedClassroom: this.state.currentClassroom})
+            this.setState({welcomeRender: false, text: this.state.currentNote.content, noteSize: 6, noteStatus: true, editView: true, newClassroomFormBool: false, title: this.state.currentNote.title, selectedClassroom: this.state.currentClassroom})
           })
         })
       }
@@ -213,6 +213,7 @@ class App extends Component {
 //###################################################
 //handles clicks on the main menu
     handleMenuClick = (e, data) =>{
+      this.setState({welcomeRender: false})
 //##################################################################
 //handling new note selection
     e.target.id === 'new-note' && this.setState({newClassroomFormBool: false, title: '', editView: true, noteStatus: false, text: '', currentNote: false, currentClassroom: {}, noteSize: 9, selectedClassroom: {id: ''}})
@@ -531,7 +532,8 @@ handleSeeLiveNote = e => {
   //     return note.classroom_id === currentClassroom.id
   //   })
   // }
-
+//######################################################
+//popuptour
 
     render() {
       return (
