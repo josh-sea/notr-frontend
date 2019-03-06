@@ -339,7 +339,6 @@ class App extends Component {
           !r.success ?
           alert('Username/Password did not match, please try again') :
           this.setState({
-            active: true,
             authenticated: r.success,
             currentUser: r.user,
             userClassrooms: r.classrooms,
@@ -350,6 +349,7 @@ class App extends Component {
             users: r.users,
             classrooms: r.user.classrooms,
             welcomeRender: true,
+            active: true,
           },()=>{
             const classroomNames = this.state.userClassrooms.map(classroom=>{
               return { key: classroom.id, value: classroom.id, text: classroom.name }
@@ -376,7 +376,6 @@ class App extends Component {
             !r.success ?
             alert(r.errors) :
             this.setState({
-              active: true,
               authenticated: r.success,
               currentUser: r.user,
               userClassrooms: r.classrooms,
@@ -387,6 +386,7 @@ class App extends Component {
               users: r.users,
               classrooms: r.user.classrooms,
               welcomeRender: true,
+              active: true,
             },()=>{
               const classroomNames = this.state.userClassrooms.map(classroom=>{
                 return { key: classroom.id, value: classroom.id, text: classroom.name }
