@@ -634,7 +634,7 @@ handleSeeLiveNote = e => {
         <Row>
           <Col s={12}>
             <Segment>
-              <h6>by: JoshSea 2019</h6>
+              <h6 >by: JoshSea 2019</h6>
               <a href='https://www.github.com/josh-sea' target='_blank' rel="noopener noreferrer">GitHub</a>
             </Segment>
           </Col>
