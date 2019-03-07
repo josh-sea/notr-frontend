@@ -95,13 +95,55 @@ class App extends Component {
 //controlling input to text editor
       noteEdit = (value) => {
           this.setState({ text: value },()=>{
-
+            if (this.state.currentNote.id>0){
+              fetch(`${BASEURL}/notes/${this.state.currentNote.id}`, {
+              method: "PATCH",
+              headers:
+              {
+                "Content-Type": 'application/json',
+                "Accept": 'application/json'
+              },
+              body: JSON.stringify({
+                title: this.state.title,
+                content: this.state.text,
+                user_id: this.state.currentUser.id,
+                classroom_id: this.state.currentNote.classroom_id
+              })
+            })
+            // .then(r=>r.json())
+            // .then(r=>this.editNote(r))
+          }
         })
       }
 //###################################################
 //controlling click on an individual note button
       handleClick = e => {
-        autoSaveTimer && clearInterval(auto)
+      //   const autoSaveTimer = () => {
+      //     console.log('set timer');
+      //     auto = setInterval(autoSave, 10000);
+      //   }
+      //   const autoSave = () => {
+      //     console.log('in interval');
+      //     if (this.state.currentNote.id>0){
+      //       fetch(`${BASEURL}/notes/${this.state.currentNote.id}`, {
+      //       method: "PATCH",
+      //       headers:
+      //       {
+      //         "Content-Type": 'application/json',
+      //         "Accept": 'application/json'
+      //       },
+      //       body: JSON.stringify({
+      //         title: this.state.title,
+      //         content: this.state.text,
+      //         user_id: this.state.currentUser.id,
+      //         classroom_id: this.state.currentNote.classroom_id
+      //       })
+      //     })
+      //     // .then(r=>r.json())
+      //     // .then(r=>this.editNote(r))
+      //   }
+      // }
+      //   autoSaveTimer && clearInterval(auto)
         const currentNote = this.state.notes.find(note=>{
           return note.id === parseInt(e.target.dataset.id)
         })
@@ -114,31 +156,7 @@ class App extends Component {
             this.setState({welcomeRender: false, text: this.state.currentNote.content, noteSize: 6, noteStatus: true, editView: true, newClassroomFormBool: false, title: this.state.currentNote.title, selectedClassroom: this.state.currentClassroom})
           })
         })
-        const autoSaveTimer = () => {
-          auto = setInterval(autoSave, 3000);
-        }
-        const autoSave = () => {
-          console.log('in interval');
-          if (this.state.currentNote.id>0){
-            fetch(`${BASEURL}/notes/${this.state.currentNote.id}`, {
-            method: "PATCH",
-            headers:
-            {
-              "Content-Type": 'application/json',
-              "Accept": 'application/json'
-            },
-            body: JSON.stringify({
-              title: this.state.title,
-              content: this.state.text,
-              user_id: this.state.currentUser.id,
-              classroom_id: this.state.currentNote.classroom_id
-            })
-          })
-          // .then(r=>r.json())
-          // .then(r=>this.editNote(r))
-        }
-      }
-      autoSaveTimer()
+      // autoSaveTimer()
     }
 //###################################################
 //new note functionality
@@ -146,6 +164,8 @@ class App extends Component {
     const foundNewNote = this.state.notes.find(anote=>{
       return anote.id === note.id
     })
+    console.log(note);
+    console.log(this.state.classrooms);
     foundNewNote ||
     this.setState(prevState=>{
       return { notes: [...prevState.notes, note], userNotes: [...prevState.userNotes, note], text: '', title: '', selectedClassroom: {id: ''}}
@@ -292,10 +312,10 @@ class App extends Component {
           classroom_id: this.state.selectedClassroom.id
         })
       })
-      // .then(r=>r.json())
-      // .then(r=>{
-      //     return this.editNote(r)
-      // })
+      .then(r=>r.json())
+      .then(r=>{
+          return this.editNote(r)
+      })
       }
 //##################################################################
 // handling delete functionality
@@ -419,51 +439,92 @@ class App extends Component {
             user_id: this.state.currentUser.id
           })
         })
-        .then(r=>r.json())
-        .then(res=> {
-          const classroom = res.classroom
-          const note = res.note
-          const foundClass = this.state.classrooms.find(aclass=>{
-            return aclass.id === classroom.id
-          })
-          const foundUserClass =  this.state.userClassrooms.find(aclass=>{
-            return aclass.id === classroom.id
-          })
-//classroom does not exist for anyone
-          if (!foundClass){
-          this.setState(prevState=>{
-            return {
-              classrooms: [...prevState.classrooms, classroom],
-              userClassrooms: [...prevState.userClassrooms, classroom],
-              notes: [...prevState.notes, note],
-              userNotes: [...prevState.userNotes, note]
-              }
-          },()=>{
-            const classroomNames = this.state.userClassrooms.map(classroom=>{
-              return { key: classroom.id, value: classroom.id, text: classroom.name }
-            })
-            this.setState({classroomNames})
-          })
-        }
-//classroom exists but not for user
-        else if (foundClass && !foundUserClass) {
-          this.setState(prevState=>{
-            return {userClassrooms: [...prevState.userClassrooms, classroom], classrooms: [...prevState.classrooms, classroom], notes: [...prevState.notes, note], userNotes: [...prevState.userNotes, note]}
-          },()=>{
-            alert(`Someone already created ${classroom.name}, but it has been added to your classrooms!`)
-            const classroomNames = this.state.userClassrooms.map(classroom=>{
-              return { key: classroom.id, value: classroom.id, text: classroom.name }
-            })
-            this.setState({classroomNames})
-            })
-          }
-//classroom exists and already is a user classroom
-        else {
-          alert('You already have that classroom in your classrooms!')
-        }
-      })
+        // .then(r=>r.json())
+        // .then(res=> {
+//           const classroom = res.classroom
+//           const note = res.note
+//           const foundClass = this.state.classrooms.find(aclass=>{
+//             return aclass.id === classroom.id
+//           })
+//           const foundUserClass =  this.state.userClassrooms.find(aclass=>{
+//             return aclass.id === classroom.id
+//           })
+// //classroom does not exist for anyone
+//           if (!foundClass){
+//           this.setState(prevState=>{
+//             return {
+//               classrooms: [...prevState.classrooms, classroom],
+//               userClassrooms: [...prevState.userClassrooms, classroom],
+//               notes: [...prevState.notes, note],
+//               userNotes: [...prevState.userNotes, note]
+//               }
+//           },()=>{
+//             const classroomNames = this.state.userClassrooms.map(classroom=>{
+//               return { key: classroom.id, value: classroom.id, text: classroom.name }
+//             })
+//             this.setState({classroomNames})
+//           })
+//         }
+// //classroom exists but not for user
+//         else if (foundClass && !foundUserClass) {
+//           this.setState(prevState=>{
+//             return {userClassrooms: [...prevState.userClassrooms, classroom], classrooms: [...prevState.classrooms, classroom], notes: [...prevState.notes, note], userNotes: [...prevState.userNotes, note]}
+//           },()=>{
+//             alert(`Someone already created ${classroom.name}, but it has been added to your classrooms!`)
+//             const classroomNames = this.state.userClassrooms.map(classroom=>{
+//               return { key: classroom.id, value: classroom.id, text: classroom.name }
+//             })
+//             this.setState({classroomNames})
+//             })
+//           }
+// //classroom exists and already is a user classroom
+//         else {
+//           alert('You already have that classroom in your classrooms!')
+//         }
+      // })
     }
-
+    handleNewClassroomCable = (res) => {
+      const classroom = res.classroom
+      const note = res.note
+      const foundClass = this.state.classrooms.find(aclass=>{
+        return aclass.id === classroom.id
+      })
+      const foundUserClass =  this.state.userClassrooms.find(aclass=>{
+        return aclass.id === classroom.id
+      })
+      //classroom does not exist for anyone
+      if (!foundClass){
+      this.setState(prevState=>{
+        return {
+          classrooms: [...prevState.classrooms, classroom],
+          userClassrooms: [...prevState.userClassrooms, classroom],
+          notes: [...prevState.notes, note],
+          userNotes: [...prevState.userNotes, note]
+          }
+      },()=>{
+        const classroomNames = this.state.userClassrooms.map(classroom=>{
+          return { key: classroom.id, value: classroom.id, text: classroom.name }
+        })
+        this.setState({classroomNames})
+      })
+      }
+      //classroom exists but not for user
+      else if (foundClass && !foundUserClass) {
+      this.setState(prevState=>{
+        return {userClassrooms: [...prevState.userClassrooms, classroom], classrooms: [...prevState.classrooms, classroom], notes: [...prevState.notes, note], userNotes: [...prevState.userNotes, note]}
+      },()=>{
+        alert(`Someone already created ${classroom.name}, but it has been added to your classrooms!`)
+        const classroomNames = this.state.userClassrooms.map(classroom=>{
+          return { key: classroom.id, value: classroom.id, text: classroom.name }
+        })
+        this.setState({classroomNames})
+        })
+      }
+      //classroom exists and already is a user classroom
+      else {
+      alert('You already have that classroom in your classrooms!')
+      }
+    }
 
 //####################################################
 //handle new note
@@ -507,9 +568,6 @@ handleSeeLiveNote = e => {
   const selectedClassNote = this.state.notes.find(note=>{
     return note.id === parseInt(e.target.id)
   })
-  const autSaveTimer = () =>{
-
-  }
   this.setState(prevState=>{
     return {bottomQuill: !prevState.bottomQuill}},()=>{
       this.state.bottomQuill ? this.setState({mainQuillHeight: 30, textBottomQuill: selectedClassNote.content, selectedClassNote}) : this.setState({mainQuillHeight: 80, textBottomQuill: '', selectedClassNote: {}})
@@ -528,6 +586,7 @@ handleSeeLiveNote = e => {
     if (res.request === 'new'){
       return this.newNote(res.note)
     } else if (res.request === 'edit') {
+      console.log('in handle');
       return this.editNote(res.note)
     }else if (res.request === 'delete') {
       return this.deleteNote(res.note)
@@ -556,15 +615,16 @@ handleSeeLiveNote = e => {
       return (
         <div>
         <ActionCableConsumer
-          channel={{channel:"UserListenerChannel"}}
-          onReceived={(res)=>{
-            this.handleUserCable(res)
-          }}
+        channel={{channel:"ClassroomChannel"}}
+        onReceived={(res)=>{
+          this.handleNewClassroomCable(res)
+        }}
         >
         </ActionCableConsumer>
         <ActionCableConsumer
           channel={{channel: 'NewNoteChannel'}}
           onReceived={(res)=>{
+            console.log('in cable');
             this.handleReceive(res)
           }}
         >

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Container, Header, Menu, Segment } from 'semantic-ui-react'
+import { Form, Header, Menu, Segment } from 'semantic-ui-react'
 import {Animated} from "react-animated-css";
 
 const Login = ({name, handleLoginType, handleSubmit, activeMenuLogIn, handleSignInMenuTab, handleLoginPass, password, passwordConfirm, handleLoginPassConfirm}) => (
