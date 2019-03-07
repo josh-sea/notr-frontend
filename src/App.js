@@ -71,7 +71,7 @@ class App extends Component {
               users: r.users,
               classrooms: r.user.classrooms,
               welcomeRender: true,
-              active: true
+              active: false
             },()=>{
               const classroomNames = this.state.userClassrooms.map(classroom=>{
                 return { key: classroom.id, value: classroom.id, text: classroom.name }
@@ -539,9 +539,20 @@ handleSeeLiveNote = e => {
     })
   }
 
+  handleUserCable = res =>{
+    console.log(res)
+  }
+
     render() {
       return (
         <div>
+        <ActionCableConsumer
+          channel={{channel:"UserListenerChannel"}}
+          onReceived={(res)=>{
+            this.handleUserCable(res)
+          }}
+        >
+        </ActionCableConsumer>
         <ActionCableConsumer
           channel={{channel: 'NewNoteChannel'}}
           onReceived={(res)=>{
