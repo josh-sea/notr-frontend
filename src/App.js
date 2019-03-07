@@ -50,19 +50,6 @@ class App extends Component {
 //###################################################
 //componentDidMount fetches all users, notes, and classrooms
     componentDidMount() {
-      // fetch(`${BASEURL}/users`)
-      // .then(r=>r.json())
-      // .then(users=>{
-      //   this.setState({users})
-      // })
-      // fetch(`${BASEURL}/notes`)
-      // .then(r=>r.json())
-      // .then(notes=>{
-      //   this.setState({users})
-      // })
-      // fetch(`${BASEURL}/classrooms`)
-      // .then(r=>r.json())
-      // .then(classrooms=> this.setState({classrooms}))
       let token = localStorage.getItem('token')
       if (token){
         fetch(`${BASEURL}/curr_user`, {
@@ -157,42 +144,46 @@ class App extends Component {
     })
   }
 //edit functionality
-  editNote = (r) => {
-    if (this.state.currentNote.id>0){
-    if (this.state.currentUser.id === r.user_id){
-        const newUserN = this.state.userNotes.map(userNote=>{
-          if (userNote.id === r.id){
-              return r
-          } else {
-              return userNote
-          }
-        })
-        const newAllN = this.state.notes.map(anote=>{
-          if (anote.id === r.id){
-              return r
-          } else {
-              return anote
-          }
-        })
-        console.log(this.state.userNotes);
-        this.setState({userNotes: newUserN, notes: newAllN},()=>{
-          console.log(this.state.userNotes);
-          this.state.bottomQuill && this.state.selectedClassNote.id === r.id && this.setState({ textBottomQuill: r.content })
-        })
-      } else {
-        const newAllN = this.state.notes.map(anote=>{
-          if (anote.id === r.id){
-              return r
-          } else {
-              return anote
-          }
-        })
-        this.setState({notes: newAllN},()=>{
-          this.state.bottomQuill && this.state.selectedClassNote.id === r.id && this.setState({ textBottomQuill: r.content })
-        })
-      }
+editNote = (r) => {
+  const classNotes = this.state.notes.filter(note=>{
+    return note.classroom_id === this.state.currentClassroom.id
+  })
+  const noteToChange = classNotes.find(note=>{
+    return note.id === r.id
+  })
+  if (noteToChange){
+  if (this.state.currentUser.id === r.user_id){
+      const newUserN = this.state.userNotes.map(userNote=>{
+        if (userNote.id === r.id){
+            return r
+        } else {
+            return userNote
+        }
+      })
+      const newAllN = this.state.notes.map(anote=>{
+        if (anote.id === r.id){
+            return r
+        } else {
+            return anote
+        }
+      })
+      this.setState({userNotes: newUserN, notes: newAllN},()=>{
+        this.state.bottomQuill && this.state.selectedClassNote.id === r.id && this.setState({ textBottomQuill: r.content })
+      })
+    } else {
+      const newAllN = this.state.notes.map(anote=>{
+        if (anote.id === r.id){
+            return r
+        } else {
+            return anote
+        }
+      })
+      this.setState({notes: newAllN},()=>{
+        this.state.bottomQuill && this.state.selectedClassNote.id === r.id && this.setState({ textBottomQuill: r.content })
+      })
     }
   }
+}
 //delete function
     deleteNote = (r) => {
       const newAllN = this.state.notes.filter(note => {
