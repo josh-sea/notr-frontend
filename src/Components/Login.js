@@ -5,8 +5,10 @@ import {Animated} from "react-animated-css";
 const Login = ({name, handleLoginType, handleSubmit, activeMenuLogIn, handleSignInMenuTab, handleLoginPass, password, passwordConfirm, handleLoginPassConfirm}) => (
 
 
-<div style={{height: '100%', width: '100%'}}>
-  <Container style={{position: 'absolute', top: '30vh', bottom: '30vh', left: '10vw', right: '10vw'}}>
+  <Segment style={{alignItems: 'center', justifyContent: 'center', position: 'absolute', top: '5vh', right: '5vw', left: '5vw', bottom: '5vh', padding: '5%'}}>
+    <Header as='h2'>
+      KNOWTR
+    </Header>
     <Menu attached='top' tabular>
         <Menu.Item
           name='Sign In'
@@ -19,7 +21,6 @@ const Login = ({name, handleLoginType, handleSubmit, activeMenuLogIn, handleSign
           />
     </Menu>
     <Segment>
-    <Header as='h2'>Welcome!</Header>
     <Animated animanimationIn="bounceInLeft" animationOut="fadeOut" isVisible={true}>
       <Form onSubmit={handleSubmit}>
           <Form.Input type='text' placeholder='Name' name='name' value={name} onChange={handleLoginType} /><br/>
@@ -29,8 +30,7 @@ const Login = ({name, handleLoginType, handleSubmit, activeMenuLogIn, handleSign
       </Form>
       </Animated>
       </Segment>
-  </Container>
-</div>
+  </Segment>
 
 
 

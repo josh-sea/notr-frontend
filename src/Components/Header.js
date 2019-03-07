@@ -8,11 +8,12 @@ const Header = ({handleMenuClick, handleSearchType, handleWikiLeave, searchType}
 
 
   <div style={{background: '#333'}}>
-  <Menu attached='top' inverted>
-    <Dropdown id='menu-dropdown' item icon='setting' simple>
+
+  <Menu attached='top' inverted >
+    <Dropdown item icon='setting' simple>
       <Dropdown.Menu>
         <Dropdown.Item>
-          <Icon name='dropdown' />
+          <Icon id='menu-dropdown' name='dropdown' />
             <span className='text'id='new'>New...</span>
               <Dropdown.Menu>
                <Dropdown.Item onClick={handleMenuClick} id='new-classroom'>New Classroom...</Dropdown.Item>
@@ -25,7 +26,7 @@ const Header = ({handleMenuClick, handleSearchType, handleWikiLeave, searchType}
         <Dropdown.Divider />
       </Dropdown.Menu>
     </Dropdown>
-    <Menu.Item header id='note-header'>Notr</Menu.Item>
+    <Menu.Item header id='note-header'>KNOWTR</Menu.Item>
 
 
     <Menu.Menu position='right'>

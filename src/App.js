@@ -111,10 +111,12 @@ class App extends Component {
               })
             })
             // .then(r=>r.json())
-            // .then(r=>this.editNote(r))
+            // .then(r=>{
+            //   this.editNote(r)
+            // })
           }
         })
-        }
+      }
 //###################################################
 //controlling click on an individual note button
       handleClick = e => {
@@ -166,7 +168,9 @@ class App extends Component {
               return anote
           }
         })
+        console.log(this.state.userNotes);
         this.setState({userNotes: newUserN, notes: newAllN},()=>{
+          console.log(this.state.userNotes);
           this.state.bottomQuill && this.state.selectedClassNote.id === r.id && this.setState({ textBottomQuill: r.content })
         })
       } else {
@@ -219,6 +223,9 @@ class App extends Component {
 //##################################################################
 //handling logging out
     e.target.id === 'logout' && this.setState({
+      notes: [],
+      users: [],
+      classrooms: [],
       text: '',
       currentUser: {},
       currentNote: false,
@@ -241,7 +248,11 @@ class App extends Component {
       bottomQuill: false,
       mainQuillHeight: 80,
       textBottomQuill: '',
-      selectedClassNote: {}
+      selectedClassNote: {},
+      password: '',
+      passwordConfirm: '',
+      welcomeRender: false,
+      active: false,
     },()=>{
       localStorage.removeItem('token');
     })
@@ -265,7 +276,7 @@ class App extends Component {
         })
       // .then(r=>r.json())
       // .then(r=>{
-      //      return this.newNote(r)
+      //     this.newNote(r)
       //   })
 //edit note
       } else if(e.target.id === 'save' && this.state.currentNote.id>0){
@@ -285,7 +296,7 @@ class App extends Component {
       })
       // .then(r=>r.json())
       // .then(r=>{
-      //     return this.editNote(r)
+      //   this.editNote(r)
       // })
       }
 //##################################################################
@@ -541,6 +552,7 @@ handleSeeLiveNote = e => {
 
   handleUserCable = res =>{
     console.log(res)
+
   }
 
     render() {
@@ -643,8 +655,6 @@ handleSeeLiveNote = e => {
           <Dimmer active={this.state.active}>
           <Welcome handleMenuClickSim={this.handleMenuClickSim}/>
           </Dimmer>
-          </Dimmer.Dimmable>
-
         }
           {
           this.state.authenticated &&

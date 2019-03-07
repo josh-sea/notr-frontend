@@ -19,7 +19,7 @@ const ShowNote = ({text, noteEdit, title, classroomNames, handleTitleChange, han
     <Animated animationIn="fadeIn" animationOut="flipOutY" isVisible={true}>
       <Segment inverted>
         <Form.Group>
-          <Form.Dropdown placeholder='Select Classroom' label='Searchable Dropdown' scrolling search fluid options={classroomNames} onChange={handleClassSelect} value={selectedClassroom.id}/><br/>
+          <Form.Dropdown placeholder='Select Classroom' label='Search Your Classrooms' scrolling search fluid options={classroomNames} onChange={handleClassSelect} value={selectedClassroom.id}/><br/>
           <Form.Input placeholder='Note Title...' value={title} onChange={handleTitleChange}/>
         </Form.Group>
       </Segment>
