@@ -138,7 +138,7 @@ class App extends Component {
             this.setState({welcomeRender: false, text: this.state.currentNote.content, noteSize: 6, noteStatus: true, editView: true, newClassroomFormBool: false, title: this.state.currentNote.title, selectedClassroom: this.state.currentClassroom})
           })
         })
-      // autoSaveTimer()
+)
     }
 //###################################################
 //new note functionality
