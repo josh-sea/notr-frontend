@@ -12,7 +12,7 @@ import Welcome from './Components/Welcome'
 // const BASEURL = 'http://localhost:3000/api/v1'
 // const BASEURL = `https://notr-backend.herokuapp.com/api/v1`
 const BASEURL = `http://${window.location.hostname}:3000/api/v1`
-
+let auto;
 class App extends Component {
     state = {
       notes: [],
@@ -50,7 +50,7 @@ class App extends Component {
 //###################################################
 //componentDidMount fetches all users, notes, and classrooms
     componentDidMount() {
-      let token = localStorage.getItem('token')
+      let token = localStorage.getItem('token');
       if (token){
         fetch(`${BASEURL}/curr_user`, {
           headers:
@@ -95,29 +95,13 @@ class App extends Component {
 //controlling input to text editor
       noteEdit = (value) => {
           this.setState({ text: value },()=>{
-            if (this.state.currentNote.id>0){
-              fetch(`${BASEURL}/notes/${this.state.currentNote.id}`, {
-              method: "PATCH",
-              headers:
-              {
-                "Content-Type": 'application/json',
-                "Accept": 'application/json'
-              },
-              body: JSON.stringify({
-                title: this.state.title,
-                content: this.state.text,
-                user_id: this.state.currentUser.id,
-                classroom_id: this.state.currentNote.classroom_id
-              })
-            })
-            // .then(r=>r.json())
-            // .then(r=>this.editNote(r))
-          }
+
         })
       }
 //###################################################
 //controlling click on an individual note button
       handleClick = e => {
+        autoSaveTimer && clearInterval(auto)
         const currentNote = this.state.notes.find(note=>{
           return note.id === parseInt(e.target.dataset.id)
         })
@@ -130,7 +114,32 @@ class App extends Component {
             this.setState({welcomeRender: false, text: this.state.currentNote.content, noteSize: 6, noteStatus: true, editView: true, newClassroomFormBool: false, title: this.state.currentNote.title, selectedClassroom: this.state.currentClassroom})
           })
         })
+        const autoSaveTimer = () => {
+          auto = setInterval(autoSave, 7000);
+        }
+        const autoSave = () => {
+          console.log('in interval');
+          if (this.state.currentNote.id>0){
+            fetch(`${BASEURL}/notes/${this.state.currentNote.id}`, {
+            method: "PATCH",
+            headers:
+            {
+              "Content-Type": 'application/json',
+              "Accept": 'application/json'
+            },
+            body: JSON.stringify({
+              title: this.state.title,
+              content: this.state.text,
+              user_id: this.state.currentUser.id,
+              classroom_id: this.state.currentNote.classroom_id
+            })
+          })
+          // .then(r=>r.json())
+          // .then(r=>this.editNote(r))
+        }
       }
+      autoSaveTimer()
+    }
 //###################################################
 //new note functionality
   newNote = (note) => {
