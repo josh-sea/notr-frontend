@@ -115,7 +115,7 @@ class App extends Component {
           })
         })
         const autoSaveTimer = () => {
-          auto = setInterval(autoSave, 7000);
+          auto = setInterval(autoSave, 3000);
         }
         const autoSave = () => {
           console.log('in interval');
