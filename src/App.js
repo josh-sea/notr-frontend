@@ -10,8 +10,8 @@ import { ActionCableConsumer } from 'react-actioncable-provider'
 import { Segment, Dimmer } from 'semantic-ui-react'
 import Welcome from './Components/Welcome'
 // const BASEURL = 'http://localhost:3000/api/v1'
-const BASEURL = `https://notr-backend.herokuapp.com/api/v1`
-// const BASEURL = `http://${window.location.hostname}:3000/api/v1`
+// const BASEURL = `https://notr-backend.herokuapp.com/api/v1`
+const BASEURL = `http://${window.location.hostname}:3000/api/v1`
 let auto;
 class App extends Component {
     state = {
@@ -164,8 +164,6 @@ class App extends Component {
     const foundNewNote = this.state.notes.find(anote=>{
       return anote.id === note.id
     })
-    console.log(note);
-    console.log(this.state.classrooms);
     foundNewNote ||
     this.setState(prevState=>{
       return { notes: [...prevState.notes, note], userNotes: [...prevState.userNotes, note], text: '', title: '', selectedClassroom: {id: ''}}
@@ -425,57 +423,68 @@ class App extends Component {
         this.setState({newClassRoomName: e.target.value})
       }
 // newClassRoomName
-        handleNewClassRoom = e =>{
-          e.preventDefault()
-          fetch(`${BASEURL}/classrooms`, {
-            method: "POST",
-            headers:
-            {
-              "Content-Type": 'application/json',
-              "Accept": 'application/json'
-            },
-            body: JSON.stringify({
-              name: this.state.newClassRoomName,
-              user_id: this.state.currentUser.id
-            })
+      handleNewClassRoom = e => {
+        e.preventDefault()
+        fetch(`${BASEURL}/classrooms`, {
+          method: "POST",
+          headers:
+          {
+            "Content-Type": 'application/json',
+            "Accept": 'application/json'
+          },
+          body: JSON.stringify({
+            name: this.state.newClassRoomName,
+            user_id: this.state.currentUser.id
           })
-          .then(r=>r.json())
-          .then(res=> {
-            const classroom = res.classroom
-            const note = res.note
-            const foundClass = this.state.classrooms.find(aclass=>{
-              return aclass.id === classroom.id
+        })
+        .then(r=>r.json())
+        .then(res=> {
+          const classroom = res.classroom
+          const note = res.note
+          const foundClass = this.state.classrooms.find(aclass=>{
+            return aclass.id === classroom.id
+          })
+          const foundUserClass =  this.state.userClassrooms.find(aclass=>{
+            return aclass.id === classroom.id
+          })
+          //classroom does not exist for anyone
+          if (!foundClass && this.state.currentUser.id === note.user_id){
+          this.setState(prevState=>{
+            return {
+              classrooms: [...prevState.classrooms, classroom],
+              userClassrooms: [...prevState.userClassrooms, classroom],
+              notes: [...prevState.notes, note],
+              userNotes: [...prevState.userNotes, note]
+              }
+          },()=>{
+            const classroomNames = this.state.userClassrooms.map(classroom=>{
+              return { key: classroom.id, value: classroom.id, text: classroom.name }
             })
-            const foundUserClass =  this.state.userClassrooms.find(aclass=>{
-              return aclass.id === classroom.id
-            })
-            //classroom does not exist for anyone
-            if (!foundClass){
-            this.setState(prevState=>{
-              return {
-                classrooms: [...prevState.classrooms, classroom],
-                userClassrooms: [...prevState.userClassrooms, classroom],
-                notes: [...prevState.notes, note],
-                userNotes: [...prevState.userNotes, note]
+            this.setState({classroomNames})
+          })
+          }
+          //classroom exists but not for user
+          else if (foundClass && !foundUserClass  && this.state.currentUser.id === note.user_id) {
+            fetch(`${BASEURL}/classrooms/${classroom.id}`)
+            .then(r=>r.json())
+            .then(r=>{
+              console.log(this.state.users);
+              this.setState(prevState=>{
+                return {
+                  userClassrooms: [...prevState.userClassrooms, classroom],
+                  notes: [...prevState.notes, note, r.notes],
+                  userNotes: [...prevState.userNotes, note, r.notes],
+                  users: [...prevState.users, r.users].flat()
                 }
-            },()=>{
-              const classroomNames = this.state.userClassrooms.map(classroom=>{
-                return { key: classroom.id, value: classroom.id, text: classroom.name }
-              })
-              this.setState({classroomNames})
+              },()=>{
+                console.log(this.state.users);
+                const classroomNames = this.state.userClassrooms.map(classroom=>{
+                  return { key: classroom.id, value: classroom.id, text: classroom.name }
+                })
+                this.setState({classroomNames})
+                })
             })
-            }
-            //classroom exists but not for user
-            else if (foundClass && !foundUserClass) {
-            this.setState(prevState=>{
-              return {userClassrooms: [...prevState.userClassrooms, classroom], classrooms: [...prevState.classrooms, classroom], notes: [...prevState.notes, note], userNotes: [...prevState.userNotes, note]}
-            },()=>{
-              const classroomNames = this.state.userClassrooms.map(classroom=>{
-                return { key: classroom.id, value: classroom.id, text: classroom.name }
-              })
-              this.setState({classroomNames})
-              })
-            }
+          }
       })
     }
     // handleNewClassroomCable = (res) => {
@@ -614,7 +623,6 @@ handleSeeLiveNote = e => {
         <ActionCableConsumer
           channel={{channel: 'NewNoteChannel'}}
           onReceived={(res)=>{
-            console.log('in cable');
             this.handleReceive(res)
           }}
         >
