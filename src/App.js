@@ -519,9 +519,6 @@ class App extends Component {
         this.setState({classroomNames})
         })
       }
-      //classroom exists and already is a user classroom
-      else {
-      }
     }
 
 //####################################################
