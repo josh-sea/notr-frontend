@@ -439,87 +439,87 @@ class App extends Component {
               user_id: this.state.currentUser.id
             })
           })
-  //         .then(r=>r.json())
-  //         .then(res=> {
-  //           const classroom = res.classroom
-  //           const note = res.note
-  //           const foundClass = this.state.classrooms.find(aclass=>{
-  //             return aclass.id === classroom.id
-  //           })
-  //           const foundUserClass =  this.state.userClassrooms.find(aclass=>{
-  //             return aclass.id === classroom.id
-  //           })
-  // //classroom does not exist for anyone
-  //           if (!foundClass){
-  //           this.setState(prevState=>{
-  //             return {
-  //               classrooms: [...prevState.classrooms, classroom],
-  //               userClassrooms: [...prevState.userClassrooms, classroom],
-  //               notes: [...prevState.notes, note],
-  //               userNotes: [...prevState.userNotes, note]
-  //               }
-  //           },()=>{
-  //             const classroomNames = this.state.userClassrooms.map(classroom=>{
-  //               return { key: classroom.id, value: classroom.id, text: classroom.name }
-  //             })
-  //             this.setState({classroomNames})
-  //           })
-  //         }
-  // //classroom exists but not for user
-  //         else if (foundClass && !foundUserClass) {
-  //           this.setState(prevState=>{
-  //             return {userClassrooms: [...prevState.userClassrooms, classroom], classrooms: [...prevState.classrooms, classroom], notes: [...prevState.notes, note], userNotes: [...prevState.userNotes, note]}
-  //           },()=>{
-  //             alert(`Someone already created ${classroom.name}, but it has been added to your classrooms!`)
-  //             const classroomNames = this.state.userClassrooms.map(classroom=>{
-  //               return { key: classroom.id, value: classroom.id, text: classroom.name }
-  //             })
-  //             this.setState({classroomNames})
-  //             })
-  //           }
-  // //classroom exists and already is a user classroom
-  //         else {
-  //           alert('You already have that classroom in your classrooms!')
-  //         }
-  //       })
-      }
-    handleNewClassroomCable = (res) => {
-      const classroom = res.classroom
-      const note = res.note
-      const foundClass = this.state.classrooms.find(aclass=>{
-        return aclass.id === classroom.id
-      })
-      const foundUserClass =  this.state.userClassrooms.find(aclass=>{
-        return aclass.id === classroom.id
-      })
-      //classroom does not exist for anyone
-      if (!foundClass){
-      this.setState(prevState=>{
-        return {
-          classrooms: [...prevState.classrooms, classroom],
-          userClassrooms: [...prevState.userClassrooms, classroom],
-          notes: [...prevState.notes, note],
-          userNotes: [...prevState.userNotes, note]
+          .then(r=>r.json())
+          .then(res=> {
+            const classroom = res.classroom
+            const note = res.note
+            const foundClass = this.state.classrooms.find(aclass=>{
+              return aclass.id === classroom.id
+            })
+            const foundUserClass =  this.state.userClassrooms.find(aclass=>{
+              return aclass.id === classroom.id
+            })
+  //classroom does not exist for anyone
+            if (!foundClass){
+            this.setState(prevState=>{
+              return {
+                classrooms: [...prevState.classrooms, classroom],
+                userClassrooms: [...prevState.userClassrooms, classroom],
+                notes: [...prevState.notes, note],
+                userNotes: [...prevState.userNotes, note]
+                }
+            },()=>{
+              const classroomNames = this.state.userClassrooms.map(classroom=>{
+                return { key: classroom.id, value: classroom.id, text: classroom.name }
+              })
+              this.setState({classroomNames})
+            })
           }
-      },()=>{
-        const classroomNames = this.state.userClassrooms.map(classroom=>{
-          return { key: classroom.id, value: classroom.id, text: classroom.name }
+  //classroom exists but not for user
+          else if (foundClass && !foundUserClass) {
+            this.setState(prevState=>{
+              return {userClassrooms: [...prevState.userClassrooms, classroom], classrooms: [...prevState.classrooms, classroom], notes: [...prevState.notes, note], userNotes: [...prevState.userNotes, note]}
+            },()=>{
+              alert(`Someone already created ${classroom.name}, but it has been added to your classrooms!`)
+              const classroomNames = this.state.userClassrooms.map(classroom=>{
+                return { key: classroom.id, value: classroom.id, text: classroom.name }
+              })
+              this.setState({classroomNames})
+              })
+            }
+  //classroom exists and already is a user classroom
+          else {
+            alert('You already have that classroom in your classrooms!')
+          }
         })
-        this.setState({classroomNames})
-      })
       }
-      //classroom exists but not for user
-      else if (foundClass && !foundUserClass) {
-      this.setState(prevState=>{
-        return {userClassrooms: [...prevState.userClassrooms, classroom], classrooms: [...prevState.classrooms, classroom], notes: [...prevState.notes, note], userNotes: [...prevState.userNotes, note]}
-      },()=>{
-        const classroomNames = this.state.userClassrooms.map(classroom=>{
-          return { key: classroom.id, value: classroom.id, text: classroom.name }
-        })
-        this.setState({classroomNames})
-        })
-      }
-    }
+    // handleNewClassroomCable = (res) => {
+    //   const classroom = res.classroom
+    //   const note = res.note
+    //   const foundClass = this.state.classrooms.find(aclass=>{
+    //     return aclass.id === classroom.id
+    //   })
+    //   const foundUserClass =  this.state.userClassrooms.find(aclass=>{
+    //     return aclass.id === classroom.id
+    //   })
+    //   //classroom does not exist for anyone
+    //   if (!foundClass){
+    //   this.setState(prevState=>{
+    //     return {
+    //       classrooms: [...prevState.classrooms, classroom],
+    //       userClassrooms: [...prevState.userClassrooms, classroom],
+    //       notes: [...prevState.notes, note],
+    //       userNotes: [...prevState.userNotes, note]
+    //       }
+    //   },()=>{
+    //     const classroomNames = this.state.userClassrooms.map(classroom=>{
+    //       return { key: classroom.id, value: classroom.id, text: classroom.name }
+    //     })
+    //     this.setState({classroomNames})
+    //   })
+    //   }
+    //   //classroom exists but not for user
+    //   else if (foundClass && !foundUserClass) {
+    //   this.setState(prevState=>{
+    //     return {userClassrooms: [...prevState.userClassrooms, classroom], classrooms: [...prevState.classrooms, classroom], notes: [...prevState.notes, note], userNotes: [...prevState.userNotes, note]}
+    //   },()=>{
+    //     const classroomNames = this.state.userClassrooms.map(classroom=>{
+    //       return { key: classroom.id, value: classroom.id, text: classroom.name }
+    //     })
+    //     this.setState({classroomNames})
+    //     })
+    //   }
+    // }
 
 //####################################################
 //handle new note
@@ -606,16 +606,16 @@ handleSeeLiveNote = e => {
   //   console.log(res)
   // }
 
+  // <ActionCableConsumer
+  // channel={{channel:"ClassroomChannel"}}
+  // onReceived={(res)=>{
+  //   this.handleNewClassroomCable(res)
+  // }}
+  // >
+  // </ActionCableConsumer>
     render() {
       return (
         <div>
-        <ActionCableConsumer
-        channel={{channel:"ClassroomChannel"}}
-        onReceived={(res)=>{
-          this.handleNewClassroomCable(res)
-        }}
-        >
-        </ActionCableConsumer>
         <ActionCableConsumer
           channel={{channel: 'NewNoteChannel'}}
           onReceived={(res)=>{
