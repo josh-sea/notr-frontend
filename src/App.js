@@ -10,8 +10,8 @@ import { ActionCableConsumer } from 'react-actioncable-provider'
 import { Segment, Dimmer } from 'semantic-ui-react'
 import Welcome from './Components/Welcome'
 // const BASEURL = 'http://localhost:3000/api/v1'
-const BASEURL = `https://notr-backend.herokuapp.com/api/v1`
-// const BASEURL = `http://${window.location.hostname}:3000/api/v1`
+// const BASEURL = `https://notr-backend.herokuapp.com/api/v1`
+const BASEURL = `http://${window.location.hostname}:3000/api/v1`
 let auto;
 class App extends Component {
     state = {
@@ -468,7 +468,6 @@ class App extends Component {
             fetch(`${BASEURL}/classrooms/${classroom.id}`)
             .then(r=>r.json())
             .then(r=>{
-              console.log(this.state.users);
               this.setState(prevState=>{
                 return {
                   userClassrooms: [...prevState.userClassrooms, classroom],
@@ -477,7 +476,6 @@ class App extends Component {
                   users: [...prevState.users, r.users].flat()
                 }
               },()=>{
-                console.log(this.state.users);
                 const classroomNames = this.state.userClassrooms.map(classroom=>{
                   return { key: classroom.id, value: classroom.id, text: classroom.name }
                 })
