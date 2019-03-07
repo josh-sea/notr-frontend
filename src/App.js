@@ -50,19 +50,6 @@ class App extends Component {
 //###################################################
 //componentDidMount fetches all users, notes, and classrooms
     componentDidMount() {
-      // fetch(`${BASEURL}/users`)
-      // .then(r=>r.json())
-      // .then(users=>{
-      //   this.setState({users})
-      // })
-      // fetch(`${BASEURL}/notes`)
-      // .then(r=>r.json())
-      // .then(notes=>{
-      //   this.setState({users})
-      // })
-      // fetch(`${BASEURL}/classrooms`)
-      // .then(r=>r.json())
-      // .then(classrooms=> this.setState({classrooms}))
       let token = localStorage.getItem('token')
       if (token){
         fetch(`${BASEURL}/curr_user`, {
