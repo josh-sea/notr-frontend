@@ -101,19 +101,6 @@ class App extends Component {
 //###################################################
 //controlling click on an individual note button
       handleClick = e => {
-        autoSaveTimer && clearInterval(auto)
-        const currentNote = this.state.notes.find(note=>{
-          return note.id === parseInt(e.target.dataset.id)
-        })
-        currentNote &&
-        this.setState({currentNote},()=>{
-          const currentClassroom = this.state.classrooms.find(classroom=>{
-            return classroom.id === this.state.currentNote.classroom_id
-          })
-          this.setState({currentClassroom},()=>{
-            this.setState({welcomeRender: false, text: this.state.currentNote.content, noteSize: 6, noteStatus: true, editView: true, newClassroomFormBool: false, title: this.state.currentNote.title, selectedClassroom: this.state.currentClassroom})
-          })
-        })
         const autoSaveTimer = () => {
           auto = setInterval(autoSave, 3000);
         }
@@ -138,6 +125,19 @@ class App extends Component {
           // .then(r=>this.editNote(r))
         }
       }
+        autoSaveTimer && clearInterval(auto)
+        const currentNote = this.state.notes.find(note=>{
+          return note.id === parseInt(e.target.dataset.id)
+        })
+        currentNote &&
+        this.setState({currentNote},()=>{
+          const currentClassroom = this.state.classrooms.find(classroom=>{
+            return classroom.id === this.state.currentNote.classroom_id
+          })
+          this.setState({currentClassroom},()=>{
+            this.setState({welcomeRender: false, text: this.state.currentNote.content, noteSize: 6, noteStatus: true, editView: true, newClassroomFormBool: false, title: this.state.currentNote.title, selectedClassroom: this.state.currentClassroom})
+          })
+        })
       autoSaveTimer()
     }
 //###################################################
@@ -507,9 +507,6 @@ handleSeeLiveNote = e => {
   const selectedClassNote = this.state.notes.find(note=>{
     return note.id === parseInt(e.target.id)
   })
-  const autSaveTimer = () =>{
-
-  }
   this.setState(prevState=>{
     return {bottomQuill: !prevState.bottomQuill}},()=>{
       this.state.bottomQuill ? this.setState({mainQuillHeight: 30, textBottomQuill: selectedClassNote.content, selectedClassNote}) : this.setState({mainQuillHeight: 80, textBottomQuill: '', selectedClassNote: {}})
