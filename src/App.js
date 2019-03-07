@@ -482,7 +482,7 @@ class App extends Component {
   //           alert('You already have that classroom in your classrooms!')
   //         }
   //       })
-  //     }
+      }
     handleNewClassroomCable = (res) => {
       const classroom = res.classroom
       const note = res.note
@@ -602,9 +602,9 @@ handleSeeLiveNote = e => {
     })
   }
 
-  handleUserCable = res =>{
-    console.log(res)
-  }
+  // handleUserCable = res =>{
+  //   console.log(res)
+  // }
 
     render() {
       return (
