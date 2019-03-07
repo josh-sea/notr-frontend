@@ -71,6 +71,7 @@ class App extends Component {
               users: r.users,
               classrooms: r.user.classrooms,
               welcomeRender: true,
+              active: true
             },()=>{
               const classroomNames = this.state.userClassrooms.map(classroom=>{
                 return { key: classroom.id, value: classroom.id, text: classroom.name }
@@ -94,7 +95,7 @@ class App extends Component {
 //controlling input to text editor
       noteEdit = (value) => {
           this.setState({ text: value },()=>{
-            if (this.state.currentNote.id>0 && this.state.selectedClassNote.id > 1){
+            if (this.state.currentNote.id>0){
               fetch(`${BASEURL}/notes/${this.state.currentNote.id}`, {
               method: "PATCH",
               headers:
@@ -110,12 +111,10 @@ class App extends Component {
               })
             })
             // .then(r=>r.json())
-            // .then(r=>{
-            //   this.editNote(r)
-            // })
+            // .then(r=>this.editNote(r))
           }
         })
-      }
+        }
 //###################################################
 //controlling click on an individual note button
       handleClick = e => {
@@ -144,46 +143,46 @@ class App extends Component {
     })
   }
 //edit functionality
-editNote = (r) => {
-  const classNotes = this.state.notes.filter(note=>{
-    return note.classroom_id === this.state.currentClassroom.id
-  })
-  const noteToChange = classNotes.find(note=>{
-    return note.id === r.id
-  })
-  if (noteToChange){
-  if (this.state.currentUser.id === r.user_id){
-      const newUserN = this.state.userNotes.map(userNote=>{
-        if (userNote.id === r.id){
-            return r
-        } else {
-            return userNote
-        }
-      })
-      const newAllN = this.state.notes.map(anote=>{
-        if (anote.id === r.id){
-            return r
-        } else {
-            return anote
-        }
-      })
-      this.setState({userNotes: newUserN, notes: newAllN},()=>{
-        this.state.bottomQuill && this.state.selectedClassNote.id === r.id && this.setState({ textBottomQuill: r.content })
-      })
-    } else {
-      const newAllN = this.state.notes.map(anote=>{
-        if (anote.id === r.id){
-            return r
-        } else {
-            return anote
-        }
-      })
-      this.setState({notes: newAllN},()=>{
-        this.state.bottomQuill && this.state.selectedClassNote.id === r.id && this.setState({ textBottomQuill: r.content })
-      })
+  editNote = (r) => {
+    const classNotes = this.state.notes.filter(note=>{
+      return note.classroom_id === this.state.currentClassroom.id
+    })
+    const noteToChange = classNotes.find(note=>{
+      return note.id === r.id
+    })
+    if (noteToChange){
+    if (this.state.currentUser.id === r.user_id){
+        const newUserN = this.state.userNotes.map(userNote=>{
+          if (userNote.id === r.id){
+              return r
+          } else {
+              return userNote
+          }
+        })
+        const newAllN = this.state.notes.map(anote=>{
+          if (anote.id === r.id){
+              return r
+          } else {
+              return anote
+          }
+        })
+        this.setState({userNotes: newUserN, notes: newAllN},()=>{
+          this.state.bottomQuill && this.state.selectedClassNote.id === r.id && this.setState({ textBottomQuill: r.content })
+        })
+      } else {
+        const newAllN = this.state.notes.map(anote=>{
+          if (anote.id === r.id){
+              return r
+          } else {
+              return anote
+          }
+        })
+        this.setState({notes: newAllN},()=>{
+          this.state.bottomQuill && this.state.selectedClassNote.id === r.id && this.setState({ textBottomQuill: r.content })
+        })
+      }
     }
   }
-}
 //delete function
     deleteNote = (r) => {
       const newAllN = this.state.notes.filter(note => {
@@ -220,9 +219,6 @@ editNote = (r) => {
 //##################################################################
 //handling logging out
     e.target.id === 'logout' && this.setState({
-      notes: [],
-      users: [],
-      classrooms: [],
       text: '',
       currentUser: {},
       currentNote: false,
@@ -245,11 +241,7 @@ editNote = (r) => {
       bottomQuill: false,
       mainQuillHeight: 80,
       textBottomQuill: '',
-      selectedClassNote: {},
-      password: '',
-      passwordConfirm: '',
-      welcomeRender: false,
-      active: false,
+      selectedClassNote: {}
     },()=>{
       localStorage.removeItem('token');
     })
@@ -273,7 +265,7 @@ editNote = (r) => {
         })
       // .then(r=>r.json())
       // .then(r=>{
-      //     this.newNote(r)
+      //      return this.newNote(r)
       //   })
 //edit note
       } else if(e.target.id === 'save' && this.state.currentNote.id>0){
@@ -293,7 +285,7 @@ editNote = (r) => {
       })
       // .then(r=>r.json())
       // .then(r=>{
-      //   this.editNote(r)
+      //     return this.editNote(r)
       // })
       }
 //##################################################################
@@ -538,10 +530,13 @@ handleSeeLiveNote = e => {
   //     return note.classroom_id === currentClassroom.id
   //   })
   // }
-   handleMenuClickSim = e =>{
-     this.setState({active: false},()=>{
-       document.getElementById('menu-dropdown').click()
-     })
+//######################################################
+//popuptour
+
+  handleMenuClickSim = e =>{
+    this.setState({active:false},()=>{
+      document.getElementById('menu-dropdown').click()
+    })
   }
 
     render() {
@@ -638,6 +633,7 @@ handleSeeLiveNote = e => {
           <Welcome handleMenuClickSim={this.handleMenuClickSim}/>
           </Dimmer>
           </Dimmer.Dimmable>
+
         }
           {
           this.state.authenticated &&
