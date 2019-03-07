@@ -50,19 +50,6 @@ class App extends Component {
 //###################################################
 //componentDidMount fetches all users, notes, and classrooms
     componentDidMount() {
-      // fetch(`${BASEURL}/users`)
-      // .then(r=>r.json())
-      // .then(users=>{
-      //   this.setState({users})
-      // })
-      // fetch(`${BASEURL}/notes`)
-      // .then(r=>r.json())
-      // .then(notes=>{
-      //   this.setState({users})
-      // })
-      // fetch(`${BASEURL}/classrooms`)
-      // .then(r=>r.json())
-      // .then(classrooms=> this.setState({classrooms}))
       let token = localStorage.getItem('token')
       if (token){
         fetch(`${BASEURL}/curr_user`, {
@@ -84,7 +71,7 @@ class App extends Component {
               users: r.users,
               classrooms: r.user.classrooms,
               welcomeRender: true,
-              active: true
+              active: false
             },()=>{
               const classroomNames = this.state.userClassrooms.map(classroom=>{
                 return { key: classroom.id, value: classroom.id, text: classroom.name }
@@ -552,9 +539,20 @@ handleSeeLiveNote = e => {
     })
   }
 
+  handleUserCable = res =>{
+    console.log(res)
+  }
+
     render() {
       return (
         <div>
+        <ActionCableConsumer
+          channel={{channel:"UserListenerChannel"}}
+          onReceived={(res)=>{
+            this.handleUserCable(res)
+          }}
+        >
+        </ActionCableConsumer>
         <ActionCableConsumer
           channel={{channel: 'NewNoteChannel'}}
           onReceived={(res)=>{
