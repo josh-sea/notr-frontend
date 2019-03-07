@@ -310,10 +310,10 @@ class App extends Component {
           classroom_id: this.state.selectedClassroom.id
         })
       })
-      .then(r=>r.json())
-      .then(r=>{
-          return this.editNote(r)
-      })
+      // .then(r=>r.json())
+      // .then(r=>{
+      //      this.editNote(r)
+      // })
       }
 //##################################################################
 // handling delete functionality
