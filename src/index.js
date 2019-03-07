@@ -5,8 +5,8 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { ActionCableProvider } from 'react-actioncable-provider';
 // const CABLEURL = `ws://localhost:3000/cable`
-// const CABLEURL = `wss://notr-backend.herokuapp.com/cable`
-const CABLEURL = `ws://${window.location.hostname}:3000/cable`
+const CABLEURL = `wss://notr-backend.herokuapp.com/cable`
+// const CABLEURL = `ws://${window.location.hostname}:3000/cable`
 
 ReactDOM.render(
   <ActionCableProvider url={`${CABLEURL}`}>
