@@ -10,9 +10,9 @@ import { ActionCableConsumer } from 'react-actioncable-provider'
 import { Segment, Dimmer } from 'semantic-ui-react'
 import Welcome from './Components/Welcome'
 // const BASEURL = 'http://localhost:3000/api/v1'
-// const BASEURL = `https://notr-backend.herokuapp.com/api/v1`
-const BASEURL = `http://${window.location.hostname}:3000/api/v1`
-let auto;
+const BASEURL = `https://notr-backend.herokuapp.com/api/v1`
+// const BASEURL = `http://${window.location.hostname}:3000/api/v1`
+// let auto;
 class App extends Component {
     state = {
       notes: [],
