@@ -425,22 +425,22 @@ class App extends Component {
         this.setState({newClassRoomName: e.target.value})
       }
 // newClassRoomName
-      handleNewClassRoom = e =>{
-        e.preventDefault()
-        fetch(`${BASEURL}/classrooms`, {
-          method: "POST",
-          headers:
-          {
-            "Content-Type": 'application/json',
-            "Accept": 'application/json'
-          },
-          body: JSON.stringify({
-            name: this.state.newClassRoomName,
-            user_id: this.state.currentUser.id
-          })
-        })
-        // .then(r=>r.json())
-        // .then(res=> {
+//       handleNewClassRoom = e =>{
+//         e.preventDefault()
+//         fetch(`${BASEURL}/classrooms`, {
+//           method: "POST",
+//           headers:
+//           {
+//             "Content-Type": 'application/json',
+//             "Accept": 'application/json'
+//           },
+//           body: JSON.stringify({
+//             name: this.state.newClassRoomName,
+//             user_id: this.state.currentUser.id
+//           })
+//         })
+//         .then(r=>r.json())
+//         .then(res=> {
 //           const classroom = res.classroom
 //           const note = res.note
 //           const foundClass = this.state.classrooms.find(aclass=>{
@@ -481,8 +481,8 @@ class App extends Component {
 //         else {
 //           alert('You already have that classroom in your classrooms!')
 //         }
-      // })
-    }
+//       })
+//     }
     handleNewClassroomCable = (res) => {
       const classroom = res.classroom
       const note = res.note
