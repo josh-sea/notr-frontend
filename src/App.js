@@ -101,31 +101,31 @@ class App extends Component {
 //###################################################
 //controlling click on an individual note button
       handleClick = e => {
-        const autoSaveTimer = () => {
-          auto = setInterval(autoSave, 3000);
-        }
-        const autoSave = () => {
-          console.log('in interval');
-          if (this.state.currentNote.id>0){
-            fetch(`${BASEURL}/notes/${this.state.currentNote.id}`, {
-            method: "PATCH",
-            headers:
-            {
-              "Content-Type": 'application/json',
-              "Accept": 'application/json'
-            },
-            body: JSON.stringify({
-              title: this.state.title,
-              content: this.state.text,
-              user_id: this.state.currentUser.id,
-              classroom_id: this.state.currentNote.classroom_id
-            })
-          })
-          // .then(r=>r.json())
-          // .then(r=>this.editNote(r))
-        }
-      }
-        autoSaveTimer && clearInterval(auto)
+      //   const autoSaveTimer = () => {
+      //     auto = setInterval(autoSave, 3000);
+      //   }
+      //   const autoSave = () => {
+      //     console.log('in interval');
+      //     if (this.state.currentNote.id>0){
+      //       fetch(`${BASEURL}/notes/${this.state.currentNote.id}`, {
+      //       method: "PATCH",
+      //       headers:
+      //       {
+      //         "Content-Type": 'application/json',
+      //         "Accept": 'application/json'
+      //       },
+      //       body: JSON.stringify({
+      //         title: this.state.title,
+      //         content: this.state.text,
+      //         user_id: this.state.currentUser.id,
+      //         classroom_id: this.state.currentNote.classroom_id
+      //       })
+      //     })
+      //     // .then(r=>r.json())
+      //     // .then(r=>this.editNote(r))
+      //   }
+      // }
+      //   autoSaveTimer && clearInterval(auto)
         const currentNote = this.state.notes.find(note=>{
           return note.id === parseInt(e.target.dataset.id)
         })
@@ -138,7 +138,7 @@ class App extends Component {
             this.setState({welcomeRender: false, text: this.state.currentNote.content, noteSize: 6, noteStatus: true, editView: true, newClassroomFormBool: false, title: this.state.currentNote.title, selectedClassroom: this.state.currentClassroom})
           })
         })
-      autoSaveTimer()
+      // autoSaveTimer()
     }
 //###################################################
 //new note functionality
