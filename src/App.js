@@ -114,7 +114,7 @@ class App extends Component {
             // .then(r=>this.editNote(r))
           }
         })
-        }
+      }
 //###################################################
 //controlling click on an individual note button
       handleClick = e => {
