@@ -513,7 +513,6 @@ class App extends Component {
       this.setState(prevState=>{
         return {userClassrooms: [...prevState.userClassrooms, classroom], classrooms: [...prevState.classrooms, classroom], notes: [...prevState.notes, note], userNotes: [...prevState.userNotes, note]}
       },()=>{
-        alert(`Someone already created ${classroom.name}, but it has been added to your classrooms!`)
         const classroomNames = this.state.userClassrooms.map(classroom=>{
           return { key: classroom.id, value: classroom.id, text: classroom.name }
         })
@@ -522,7 +521,6 @@ class App extends Component {
       }
       //classroom exists and already is a user classroom
       else {
-      alert('You already have that classroom in your classrooms!')
       }
     }
 
