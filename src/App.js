@@ -115,6 +115,8 @@ class App extends Component {
           }
         })
         }
+
+        
 //###################################################
 //controlling click on an individual note button
       handleClick = e => {
