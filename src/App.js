@@ -232,6 +232,8 @@ class App extends Component {
         newClassroomFormBool: false,
         title: '',
         selectedClassroom: {},
+        textBottomQuill: '',
+        welcomeRender: true,
       })
     }
 //###################################################
@@ -240,10 +242,26 @@ class App extends Component {
       this.setState({welcomeRender: false})
 //##################################################################
 //handling new note selection
-    e.target.id === 'new-note' && this.setState({newClassroomFormBool: false, title: '', editView: true, noteStatus: false, text: '', currentNote: false, currentClassroom: {}, noteSize: 9, selectedClassroom: {id: ''}})
+    e.target.id === 'new-note' && this.setState({
+      newClassroomFormBool: false,
+      title: '', editView: true,
+      noteStatus: false,
+      text: '',
+      currentNote: false,
+      currentClassroom: {},
+      noteSize: 9,
+      electedClassroom: {id: ''}
+    })
 //##################################################################
 //handling new classroom selection
-    e.target.id === 'new-classroom' && this.setState({newClassroomFormBool: true, editView: false, noteStatus: false, text: '', currentNote: false, currentClassroom: {}})
+    e.target.id === 'new-classroom' && this.setState({
+      newClassroomFormBool: true,
+      editView: false,
+      noteStatus: false,
+      text: '',
+      currentNote: false,
+      currentClassroom: {}
+    })
 //##################################################################
 //handling logging out
     e.target.id === 'logout' && this.setState({
