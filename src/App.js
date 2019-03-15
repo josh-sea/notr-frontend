@@ -164,11 +164,19 @@ class App extends Component {
     const foundNewNote = this.state.notes.find(anote=>{
       return anote.id === note.id
     })
-    foundNewNote ||
-    this.setState(prevState=>{
-      return { notes: [...prevState.notes, note], userNotes: [...prevState.userNotes, note], text: '', title: '', selectedClassroom: {id: ''}}
-    })
+      if(note.user_id === currentUser.id){
+      foundNewNote ||
+      this.setState(prevState=>{
+        return { notes: [...prevState.notes, note], userNotes: [...prevState.userNotes, note], text: '', title: '', selectedClassroom: {id: ''}}
+        })
+      } else {
+        foundNewNote ||
+        this.setState(prevState=>{
+          return { notes: [...prevState.notes, note]}
+          })
+      }
   }
+
 //edit functionality
   editNote = (r) => {
     const classNotes = this.state.notes.filter(note=>{
