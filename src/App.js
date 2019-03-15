@@ -164,7 +164,7 @@ class App extends Component {
     const foundNewNote = this.state.notes.find(anote=>{
       return anote.id === note.id
     })
-      if(note.user_id === currentUser.id){
+      if(note.user_id === this.state.currentUser.id){
       foundNewNote ||
       this.setState(prevState=>{
         return { notes: [...prevState.notes, note], userNotes: [...prevState.userNotes, note], text: '', title: '', selectedClassroom: {id: ''}}
